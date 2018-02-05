@@ -17,6 +17,8 @@ def data_OP_20 ():
 	df = pd.read_csv("Timely_and_Effective_Care_-_Hospital.csv")
 
 	df = df.loc[df["Measure ID"] == "OP_20"]
+	
+	#remove the white space in the column name with underscore
         df.columns = df_wt.columns.str.replace('\s+', '_')
 
         df.to_csv("time.csv", encoding='utf-8', index=False)
