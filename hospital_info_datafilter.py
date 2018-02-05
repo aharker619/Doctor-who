@@ -10,5 +10,8 @@ df.columns = df.columns.str.replace('\s+', '_')
 #filter the hospitals with emergency room
 df_ER = df[df["Emergency_Services"] == True]
 
+selcon  = ['Provider_ID', 'ZIP_Code','Hospital_overall_rating']
+
+df_ER = df_ER[selcon]
 
 df_ER.to_csv("HGI.csv", encoding='utf-8', index=False)
