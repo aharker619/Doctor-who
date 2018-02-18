@@ -1,0 +1,20 @@
+<!--template for user input
+https://docs.djangoproject.com/en/2.0/topics/forms/ -->
+
+<!-- I think this is not necessary
+<form action "/user_input/" method = "post">
+	<label for "zipcode">Zipcode: </label>
+	<input id = "zipcode" type = "text" name = "zipcode" value = "{{ current_zip }}">
+	<label for "user_date">Date: </label>
+	<input id = "user_date" type = "date" name = "user_zip" value = "{{ current_date }}"
+	<label for "user_time">Date and Time: </label>
+	<input id = "user_time" type = "time" name = "user_time" value = "{{ current_time }}">
+	<input type = "submit" value = "OK">
+</form> -->
+
+
+<form action "/user_input/" method = "post">
+	{% csrf_token %}
+	{{ form }}
+	<input type = "submit" value = "Submit" />
+</form>
