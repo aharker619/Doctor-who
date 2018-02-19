@@ -1,5 +1,6 @@
 from django.db import models
 from uszipcode import ZipcodeSearchEngine
+#from adaptor.model import CsvModel
 
 class EmergencyDept(models.Model):
 	'''
@@ -21,7 +22,7 @@ class EmergencyDept(models.Model):
 	location = models.CharField(max_length = 150)
 	hospital_rating = models.IntegerField()
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.name
 
 class UrgentCare(models.Model):
@@ -32,18 +33,24 @@ class UrgentCare(models.Model):
 	'''
 	provider_id = models.IntegerField(primary_key = True)
 	name = models.CharField(max_length = 150)
+	telephone = models.CharField(max_length = 12)
 	address = models.CharField(max_length = 100)
-	address_2 = models.CharField(max_length = 100)
+	address2 = models.CharField(max_length = 100)
 	city = models.CharField(max_length = 50)
 	state = models.CharField(max_length = 2)
 	zipcode = models.CharField(max_length = 9)
-	phone_number = models.CharField(max_length = 12)
-	latitude = models.FloatField()
-	longitude = models.FloatField()
-
-	def __unicode__(self):
+	lng = models.FloatField()
+	lat = models.FloatField()
+	
+	def __str__(self):
 		return self.name
-
+'''
+class UrgentCsvModel(CsvDbModel):
+	
+	class Meta:
+		dbModel = UrgentCare
+		delimiter = "|"
+'''
 
 class PatientWaittime(models.Model):
 	'''
@@ -60,11 +67,11 @@ class PatientWaittime(models.Model):
 	immediacy = models.IntegerField()
 	painscale = models.IntegerField()
 	blinded_hospital_code = models.IntegerField()
-	metro_area = models.IntegerField()
+	metro_area = models.FloatField(null = True)
 	year = models.IntegerField()
 
-	def __unicode__(self):
-		return self.wait_time
+	def __str__(self):
+		return self.patient_id, self.wait_time
 
 
 class User(models.Model):
@@ -87,7 +94,7 @@ class User(models.Model):
 		return closest_10_zip
 	closest_10_zip = property(get_closest_zipcodes)
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.zipcode
 
 # are classes needed for APIs?
