@@ -1,6 +1,5 @@
 from django.db import models
 from uszipcode import ZipcodeSearchEngine
-#from adaptor.model import CsvModel
 
 class EmergencyDept(models.Model):
 	'''
@@ -19,8 +18,9 @@ class EmergencyDept(models.Model):
 	condition = models.CharField(max_length = 30) # what is this?
 	score = models.IntegerField()
 	sample = models.IntegerField()
-	location = models.CharField(max_length = 150)
 	hospital_rating = models.IntegerField()
+	lng = models.FloatField()
+	lat = models.FloatField() 
 
 	def __str__(self):
 		return self.name
@@ -44,13 +44,7 @@ class UrgentCare(models.Model):
 	
 	def __str__(self):
 		return self.name
-'''
-class UrgentCsvModel(CsvDbModel):
-	
-	class Meta:
-		dbModel = UrgentCare
-		delimiter = "|"
-'''
+
 
 class PatientWaittime(models.Model):
 	'''
@@ -70,7 +64,7 @@ class PatientWaittime(models.Model):
 	metro_area = models.FloatField(null = True)
 	year = models.IntegerField()
 
-	def __str__(self):
+	def __unicode__(self):
 		return self.patient_id, self.wait_time
 
 
