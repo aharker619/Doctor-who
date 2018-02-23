@@ -95,7 +95,8 @@ def kernel_reg(df, bw=90, indepv="ARRTIME"):
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.5)
 
     train = pd.concat([x_train, y_train], axis=1)
-    test = pd.concat([x_train, y_train], axis=1)
+    test = pd.concat([x_test, y_test], axis=1)
+    
     #kernel density estimations
     kernel='epanechnikov'
     kde = KernelDensity(kernel=kernel, bandwidth=bw).fit(train)
