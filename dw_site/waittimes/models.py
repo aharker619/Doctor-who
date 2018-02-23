@@ -15,12 +15,14 @@ class EmergencyDept(models.Model):
 	state = models.CharField(max_length = 2)
 	zipcode = models.CharField(max_length = 9)
 	phone_number = models.CharField(max_length = 12)
-	condition = models.CharField(max_length = 30) # what is this?
 	score = models.IntegerField()
 	sample = models.IntegerField()
 	hospital_rating = models.IntegerField()
 	lng = models.FloatField()
-	lat = models.FloatField() 
+	lat = models.FloatField()
+	msa = models.CharField(max_length = 20)
+	driving_time = models.FloatField()
+	predicted_wait = models.FloatField() 
 
 	def __str__(self):
 		return self.name
@@ -68,46 +70,4 @@ class PatientWaittime(models.Model):
 		return self.patient_id, self.wait_time
 
 
-class User(models.Model):
-	zipcode = models.CharField(max_length = 9)
-	# need this for day, month, and time
-	user_time = models.TimeField()
-	user_date = models.DateField()
-
-	def get_closest_zipcodes(self):
-		'''
-		Calculate latitude and longitude of User
-		Calculate closest 10 zip codes?
-		'''
-		search = ZipcodeSearchEngine()
-		user_loc = search.by_zipcode(self.zipcode)
-
-		closest_10_zip = search.by_coordinate(user_loc.Latitude, 
-			user_loc.Longitude, radius = 50, returns = 10)
-
-		return closest_10_zip
-	closest_10_zip = property(get_closest_zipcodes)
-
-	def __str__(self):
-		return self.zipcode
-
-# are classes needed for APIs?
-
-# Thoughts: we could have a database already populated with closest hospitals
-# also urgent cares
-# zipcode look up would find closest hospitals to do driving calc, and urgent care
-# saves using zipcodesearch within website
-# can you create a database built from already established databases?
-'''
-class ZipcodeLink(models.Model):
-'''
-'''
-	user_zip = models.CharField(max_length = 9)
-	closest_eds = models.ForeignKey(EmergencyDept, on_delete = models.CASCADE)
-	closest_uc = models.ForeignKey(UrgentCare, on_delete = models.CASCADE)
-'''
-#class Weather(models.Model):
-
-
-#class Maps(models.Model):
 

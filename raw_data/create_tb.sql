@@ -1,5 +1,7 @@
-#Tianchu Shu
-
+/* Tianchu Shu */
+/* msa.csv from https://www.census.gov/geographies/reference-files/time-series/demo/metro-micro/delineation-files.html*/
+/* states.csv from https://github.com/jasonong/List-of-US-States/blob/master/states.csv */
+/* zip_table data from http://federalgovernmentzipcodes.us/ */
 CREATE TABLE time
   (provider_id varchar(10),
    hospital_name varchar(20),
@@ -7,11 +9,10 @@ CREATE TABLE time
    city varchar(20),
    state varchar(2),
    zip_code varchar(9),
+   county varchar(30),
    phone_number varchar(12),
-   condition varchar(30),
    score integer,
    sample integer,
-   location varchar(150),
     PRIMARY KEY (provider_id));
 
 .separator ","
@@ -22,9 +23,6 @@ CREATE TABLE hgi
  (provider_id varchar(10),
   zip_code varchar(9),
   hospital_overall_rating integer,
-  county varchar(50),
-  lng real,
-  lat real,
 
   FOREIGN KEY (provider_id)
     REFERENCES time (provider_id));
@@ -51,11 +49,27 @@ CREATE TABLE msa_table
 
 CREATE TABLE state_abbrv
   (fullname varchar(50),
-   abbreviation varchar(2)
+   abbreviation varchar(2),
 
   FOREIGN KEY (fullname)
     REFERENCES msa_table (State));
 
 .separator ","
-.import state.csv state_abbrv
+.import states.csv state_abbrv
 
+CREATE TABLE zip_table
+  (zipcode varchar(9),
+   zipcodetype varchar(20),
+   city varchar(50),
+   state varchar(50),
+   locationtype varchar(50),
+   lat real,
+   lng real,
+   location varchar(100),
+   decommisioned varchar(10),
+   tax integer,
+   population integer, 
+   wages integer);
+
+.separator ","
+.import free-zipcode-database-Primary.csv zip_table
