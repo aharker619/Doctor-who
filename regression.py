@@ -4,6 +4,7 @@
 #
 # kernel reg code gathered from 
 #https://stats.stackexchange.com/questions/218514/how-to-decide-whether-a-kernel-density-estimate-is-good
+#https://jakevdp.github.io/PythonDataScienceHandbook/05.13-kernel-density-estimation.html
 
 import numpy as np
 import matplotlib.pylab as plt
@@ -79,7 +80,7 @@ def split_data(dataset, indepv=ALLVAR):
     #return predictions, x_test, y_test
 
 
-def kernel_reg(df, indepv=VAR, bw=5):
+def kernel_reg(df, bw=120, indepv="ARRTIME"):
     '''
     Make various KDEs that using 3 different kernels and bandwidths 
     
@@ -92,22 +93,26 @@ def kernel_reg(df, indepv=VAR, bw=5):
     '''
     y = df["WAITTIME"]
     x = df[indepv]
-    x_train, x, y_train, y = train_test_split(x, y, test_size = 0.3)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3)
 
-    # kernel density estimations
+    train = pd.concat([x_train, y_train], axis=1)
+    test = pd.concat([x_test, y_test], axis=1)
+    #kernel density estimations
     kernel='epanechnikov'
-    kde = KernelDensity(kernel=kernel, bandwidth=bw).fit(x)
-    plt.plot(y, np.exp(kde.score_samples(x)), label='%s, bw=%s' % (kernel, bw))
+    kde = KernelDensity(kernel=kernel, bandwidth=bw).fit(train)
+    est = kde.score_samples(train)
+    plt.scatter(x_train, est, label='%s, bw=%s' % (kernel, bw))
     plt.legend(loc=0)
 
     kernel='gaussian'
-    kde = KernelDensity(kernel=kernel, bandwidth=bw).fit(x)
-    plt.plot(y, np.exp(kde.score_samples(x)), label='%s, bw=%s' % (kernel, bw))
+    kde = KernelDensity(kernel=kernel, bandwidth=bw).fit(train)
+    est = kde.score_samples(train)
+    plt.scatter(x_train, est, label='%s, bw=%s' % (kernel, bw))
     plt.legend(loc=0)
 
     kernel='tophat'
-    kde = KernelDensity(kernel=kernel, bandwidth=bw).fit(x)
-    plt.plot(y, np.exp(kde.score_samples(x)), label='%s, bw=%s' % (kernel, bw))
+    kde = KernelDensity(kernel=kernel, bandwidth=bw).fit(train)
+    est = kde.score_samples(train)
+    plt.scatter(x_train, est, label='%s, bw=%s' % (kernel, bw))
     plt.legend(loc=0)
-
     plt.show()
