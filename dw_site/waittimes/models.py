@@ -18,11 +18,11 @@ class EmergencyDept(models.Model):
 	score = models.IntegerField()
 	sample = models.IntegerField()
 	hospital_rating = models.IntegerField()
-	lng = models.FloatField()
-	lat = models.FloatField()
-	msa = models.CharField(max_length = 20)
-	driving_time = models.FloatField()
-	predicted_wait = models.FloatField() 
+	lng = models.FloatField(default = 0)
+	lat = models.FloatField(default = 0)
+	msa = models.CharField(max_length = 20, default = '')
+	driving_time = models.FloatField(default = 0)
+	predicted_wait = models.FloatField(default = 0) 
 
 	def __str__(self):
 		return self.name
@@ -41,8 +41,8 @@ class UrgentCare(models.Model):
 	city = models.CharField(max_length = 50)
 	state = models.CharField(max_length = 2)
 	zipcode = models.CharField(max_length = 9)
-	lng = models.FloatField()
-	lat = models.FloatField()
+	lng = models.FloatField(default = 0)
+	lat = models.FloatField(default = 0)
 	
 	def __str__(self):
 		return self.name
@@ -63,7 +63,7 @@ class PatientWaittime(models.Model):
 	immediacy = models.IntegerField()
 	painscale = models.IntegerField()
 	blinded_hospital_code = models.IntegerField()
-	metro_area = models.FloatField(null = True)
+	metro_area = models.FloatField(default = 0)
 	year = models.IntegerField()
 
 	def __unicode__(self):

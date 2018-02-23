@@ -15,6 +15,6 @@ https://docs.djangoproject.com/en/2.0/topics/forms/ -->
 
 <form action "/user_input/" method = "post">
 	{% csrf_token %}
-	{{ form }}
+	{{ form.as_p }}
 	<input type = "submit" value = "Submit" />
 </form>
