@@ -13,7 +13,6 @@ from sklearn import linear_model
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors.kde import KernelDensity
-from sklearn import svm
 
 VAR = ['ARRTIME', 'AVGWAIT', 'MSA', 'PAINSCALE']
 MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 'SEPT', 'OCT', 'NOV', 'DEC']
@@ -34,7 +33,7 @@ def clean_data(FILENAME):
     df['ARRTIME'] = df['ARRTIME'].apply(lambda x: 60*(x//100) + x%100) 
     #make MSA a dummy var
     df['MSA'] = df['MSA'].apply(lambda x: x-1) 
-    df = df[df['PAINSCALE'] >= 0]
+
     #generate avg waittime for every hosiptal
     df.loc[:,'AVGWAIT'] = df.loc[:,'WAITTIME'].groupby(df.loc[:,'HOSPCODE']).transform('mean')
 
@@ -80,7 +79,7 @@ def split_data(dataset, indepv=ALLVAR):
     #return predictions, x_test, y_test
 
 
-def kernel_reg(df, bw=120, indepv="ARRTIME"):
+def kernel_reg(df, bw=90, indepv="ARRTIME"):
     '''
     Make various KDEs that using 3 different kernels and bandwidths 
     
@@ -93,26 +92,26 @@ def kernel_reg(df, bw=120, indepv="ARRTIME"):
     '''
     y = df["WAITTIME"]
     x = df[indepv]
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.5)
 
     train = pd.concat([x_train, y_train], axis=1)
-    test = pd.concat([x_test, y_test], axis=1)
+    test = pd.concat([x_train, y_train], axis=1)
     #kernel density estimations
     kernel='epanechnikov'
     kde = KernelDensity(kernel=kernel, bandwidth=bw).fit(train)
-    est = kde.score_samples(train)
-    plt.scatter(x_train, est, label='%s, bw=%s' % (kernel, bw))
+    est = kde.score_samples(test)
+    plt.scatter(y_test, est, label='%s, bw=%s' % (kernel, bw))
     plt.legend(loc=0)
 
     kernel='gaussian'
     kde = KernelDensity(kernel=kernel, bandwidth=bw).fit(train)
-    est = kde.score_samples(train)
-    plt.scatter(x_train, est, label='%s, bw=%s' % (kernel, bw))
+    est = kde.score_samples(test)
+    plt.scatter(y_test, est, label='%s, bw=%s' % (kernel, bw))
     plt.legend(loc=0)
 
     kernel='tophat'
     kde = KernelDensity(kernel=kernel, bandwidth=bw).fit(train)
-    est = kde.score_samples(train)
-    plt.scatter(x_train, est, label='%s, bw=%s' % (kernel, bw))
+    est = kde.score_samples(test)
+    plt.scatter(y_test, est, label='%s, bw=%s' % (kernel, bw))
     plt.legend(loc=0)
     plt.show()
