@@ -52,21 +52,27 @@ Test Cases:
 Notes:
         1) Must import googlemaps to use this function:
                 Use command: 'import googlemaps'
-                
-        2) Need to write conditions for when API requests die.
-                Details: 
+              
+                    
+        2) APIs used from Google:
+            Distance-Matrix:
+                https://developers.google.com/maps/documentation/distance-matrix/
+            Geocoding:
+                https://developers.google.com/maps/documentation/geocoding/intro
+            
+            Details: 
                 2,500 free elements per day, calculated as the sum 
                     of client-side and server-side queries.
                 Maximum of 25 origins or 25 destinations per request.
                 100 elements per request.
                 100 elements per second, calculated as the sum of 
                     client-side and server-side queries.
-                    
-        3) APIs used from Google:
-            Distance-Matrix:
-                https://developers.google.com/maps/documentation/distance-matrix/
-            Geocoding:
-                https://developers.google.com/maps/documentation/geocoding/intro
+                
+                
+Further Progess:
+                
+        1) Need to write conditions for when API requests die.                    
+        2) Look into Status Codes in both API documentation to account for error cases. 
 '''
 
 
