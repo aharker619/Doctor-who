@@ -1,7 +1,10 @@
 /* Tianchu Shu */
+/* time.csv from Timely and Effective Data from Medicare Hospital Compare */
+/* hgi.csv from Hospital General Information from Medicare Hospital Compare */
 /* msa.csv from https://www.census.gov/geographies/reference-files/time-series/demo/metro-micro/delineation-files.html*/
 /* states.csv from https://github.com/jasonong/List-of-US-States/blob/master/states.csv */
-/* zip_table data from http://federalgovernmentzipcodes.us/ */
+/* zip_table data from https://gist.github.com/erichurst/7882666 which uses Census ZCTAs from 2015 to match hospitals */
+
 CREATE TABLE time
   (provider_id varchar(10),
    hospital_name varchar(20),
@@ -59,17 +62,9 @@ CREATE TABLE state_abbrv
 
 CREATE TABLE zip_table
   (zipcode varchar(9),
-   zipcodetype varchar(20),
-   city varchar(50),
-   state varchar(50),
-   locationtype varchar(50),
    lat real,
-   lng real,
-   location varchar(100),
-   decommisioned varchar(10),
-   tax integer,
-   population integer, 
-   wages integer);
+   lng real);
 
 .separator ","
-.import free-zipcode-database-Primary.csv zip_table
+.import combined_zips.csv zip_table    
+

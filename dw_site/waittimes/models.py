@@ -1,12 +1,55 @@
 from django.db import models
 from uszipcode import ZipcodeSearchEngine
+from django.db.models.expressions import RawSQL
+from django.db.backends.signals import connection_created
+from django.dispatch import receiver
+import math
+
+# code from https://stackoverflow.com/questions/19703975/django-sort-by-distance/26219292#26219292
+@receiver(connection_created)
+def extend_sqlite(connection = None, **kwargs):
+	if connection.vendor == "sqlite":
+		cf = connection.connection.create_function
+		cf('asin', 1, math.asin)
+		cf('cos', 1, math.cos)
+		cf('radians', 1, math.radians)
+		cf('sin', 1, math.sin)
+		cf('sqrt', 1, math.sqrt)
+		cf('pow', 2, math.pow)
+
+
+# reference https://stackoverflow.com/questions/19703975/django-sort-by-distance/26219292#26219292
+# used haversine formula from Pa3
+class LocationManager(models.Manager):
+	def nearby(self, lat, lng, radius):
+		'''
+		Get queryset of locations within the given radius
+
+		Inputs:
+			lat: float, user latitude
+			lng: float, user longitude
+			radius: integer, radius around user in km
+		'''
+		haversine = """
+					6367 * 2 * asin(sqrt(pow(sin((radians(%s) - radians(lat)) / 
+					2), 2) + cos(radians(lat)) * cos(radians(%s)) * pow(sin((
+					radians(%s) - radians(lng)) / 2), 2)))
+					"""
+
+		return self.get_queryset()\
+				   .annotate(distance = RawSQL(haversine, (lat, lat, lng)))\
+				   .filter(distance__lt = radius)\
+				   .order_by('distance')
 
 class EmergencyDept(models.Model):
 	'''
 	Database describing Emergency Departments
 	
-	Data gathered from Timely and Effective Hospital Data and
-	Hospital General Information from Medicare's Hospital Compare
+	Data gathered from Timely and Effective Hospital Data,
+	Hospital General Information from Medicare's Hospital Compare,
+	Census metro-micro delineation-files,
+	state codes from https://github.com/jasonong/List-of-US-States/blob/master/states.csv,
+	and zipcodes from http://federalgovernmentzipcodes.us/
 	'''
 	provider_id = models.IntegerField(primary_key = True)
 	name = models.CharField(max_length = 150)
@@ -23,6 +66,8 @@ class EmergencyDept(models.Model):
 	msa = models.CharField(max_length = 20, default = '')
 	driving_time = models.FloatField(default = 0)
 	predicted_wait = models.FloatField(default = 0) 
+
+	objects = LocationManager()
 
 	def __str__(self):
 		return self.name
@@ -41,8 +86,10 @@ class UrgentCare(models.Model):
 	city = models.CharField(max_length = 50)
 	state = models.CharField(max_length = 2)
 	zipcode = models.CharField(max_length = 9)
-	lng = models.FloatField(default = 0)
-	lat = models.FloatField(default = 0)
+	lng = models.FloatField()
+	lat = models.FloatField()
+
+	objects = LocationManager()
 	
 	def __str__(self):
 		return self.name
@@ -55,7 +102,6 @@ class PatientWaittime(models.Model):
 	Data gathered from NHAMCS 
 	'''
 	patient_id = models.IntegerField(primary_key = True)
-	# change to DateTimeField if better
 	visit_month = models.IntegerField()
 	visit_day = models.IntegerField()
 	arrival_time = models.IntegerField()
