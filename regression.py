@@ -98,8 +98,11 @@ def kernel_reg(df, bw=90, indepv="ARRTIME"):
     test = pd.concat([x_test, y_test], axis=1)
     
     #kernel density estimations
+    
+    #instantiate and fit the KDE model
     kernel='epanechnikov'
     kde = KernelDensity(kernel=kernel, bandwidth=bw).fit(train)
+    #score_samples returns the log of the probability density
     est = kde.score_samples(test)
     plt.scatter(y_test, est, label='%s, bw=%s' % (kernel, bw))
     plt.legend(loc=0)
