@@ -1,4 +1,4 @@
-from waittimes.models import UrgentCare, EmergencyDept, PatientWaittime
+from waittimes.models import UrgentCare, EmergencyDept, PatientWaittime, ZipLocation
 import csv
 import os
 
@@ -73,5 +73,18 @@ def load_patient_data():
 			unit.blinded_hospital_code = row[7]
 			unit.metro_area = row[8]
 			unit.year = row[9]
+
+			unit.save()
+
+
+def load_zip_data():
+	with open('/home/student/Doctor-who/raw_data/combined_zips.csv') as csvfile:
+		reader = csv.reader(csvfile)
+		next(reader) 
+		for row in reader:
+			unit = ZipLocation()
+			unit.zipcode = row[0]
+			unit.lat = row[1]
+			unit.lng = row[2]
 
 			unit.save()

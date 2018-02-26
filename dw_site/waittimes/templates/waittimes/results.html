@@ -1,0 +1,42 @@
+<!-- https://tutorial.djangogirls.org/en/django_templates/ -->
+<html>
+	<head>
+		<title> Results </title>
+	</head>
+	<body>
+		<div>
+			<h2>Emergency Department Results for {{ zipcode }}</h2>
+		</div>
+		{% for total_time, hosp in sort_hosp %}
+			<div>
+				<h3>{{ hosp.name }}</h3>
+				<p>Total time: {{ total_time|floatformat }} minutes<p>
+				<p>Driving time: {{ hosp.driving_time|floatformat }} minutes</p>
+				<p>Predicted wait time: {{ hosp.predicted_wait|floatformat }} minutes</p>
+				{% if hosp.score != -1 %}
+					<p>Average wait time: {{ hosp.score }} minutes<p>
+				{% else %}
+					<p>Average wait time: Not Available</p>
+				{% endif %}
+				<p>Address: {{ hosp.address|title }} {{ hosp.city|title }}, {{ hosp.state }} {{ hosp.zipcode }} </p>
+				<p>Phone Number: {{ hosp.phone_number }}</p> 
+				{% if hosp.hospital_rating != -1 %}
+					<p>Hospital Rating: {{ hosp.hospital_rating }} / 5 </p>
+				{% else %}
+					<p>Hospital Rating: Not Available<p>
+				{% endif %}
+
+			</div>
+		{% endfor %}
+		<div>
+			<h2>Urgent Care Results for {{ zipcode }}</h2>
+		</div>
+		<div>
+			<h3>{{ uc_qs.name }}</h3>
+			<p>Address: {{ uc_qs.address|title }} {{ uc_qs.address2|title }} {{ uc_qs.city|title }}, {{ uc_qs.state }} {{ uc_qs.zipcode }} </p>
+			<p>Phone Number: {{ uc_qs.telephone }}</p>
+		</div>
+	</body>
+
+
+</html>

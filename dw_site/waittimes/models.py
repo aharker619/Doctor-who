@@ -1,5 +1,4 @@
 from django.db import models
-from uszipcode import ZipcodeSearchEngine
 from django.db.models.expressions import RawSQL
 from django.db.backends.signals import connection_created
 from django.dispatch import receiver
@@ -72,6 +71,14 @@ class EmergencyDept(models.Model):
 	def __str__(self):
 		return self.name
 
+	# https://stackoverflow.com/questions/7152497/making-a-python-user-defined-class-sortable-hashable
+	def __lt__(self, other):
+		if self.provider_id < other.provider_id:
+			return True
+		else:
+			return False
+
+
 class UrgentCare(models.Model):
 	'''
 	Database describing Urgent Care centers
@@ -112,8 +119,20 @@ class PatientWaittime(models.Model):
 	metro_area = models.FloatField(default = 0)
 	year = models.IntegerField()
 
-	def __unicode__(self):
+	def __repr__(self):
 		return self.patient_id, self.wait_time
 
 
+class ZipLocation(models.Model):
+	'''
+	Database connecting zipcodes to latitude and longitude locations
+	Data from https://boutell.com/zipcodes/ with missing zipcodes filled in by
+	ZCTA from Census https://www.census.gov/geo/maps-data/data/gazetteer2015.html
+	See clean_zips.py 
+	'''
+	zipcode = models.CharField(primary_key = True, max_length = 9)
+	lat = models.FloatField()
+	lng = models.FloatField()
 
+	def __str__(self):
+		return self.zipcode

@@ -1,6 +1,6 @@
-# clean up 2015_Gaz_zcta_national.txt
+# clean up 2015_Gaz_zcta_national.txt and fill in missing zipcodes in zipcodes.csv
 # data from Census https://www.census.gov/geo/maps-data/data/gazetteer2015.html
-# /* https://boutell.com/zipcodes/ zipcodes.csv */
+# https://boutell.com/zipcodes/ for zipcodes.csv
 import pandas as pd
 
 def clean_data():
