@@ -43,7 +43,10 @@ def sort_hospitals(hosp_qs):
 	sort_hosp = []
 	# store total time as tuple
 	for hosp in hosp_qs:
-		time = hosp.driving_time + hosp.predicted_wait
+		if hosp.driving_time != -1 / 60:
+			time = hosp.driving_time + hosp.predicted_wait
+		else:
+			time = 9999
 		sort_hosp.append((time, hosp))
 	sort_hosp = sorted(sort_hosp)
 

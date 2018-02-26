@@ -40,6 +40,7 @@ class LocationManager(models.Manager):
 				   .filter(distance__lt = radius)\
 				   .order_by('distance')
 
+
 class EmergencyDept(models.Model):
 	'''
 	Database describing Emergency Departments
@@ -67,6 +68,8 @@ class EmergencyDept(models.Model):
 	predicted_wait = models.FloatField(default = 0) 
 
 	objects = LocationManager()
+	# https://docs.djangoproject.com/en/2.0/topics/db/managers/
+	# from_queryset see if you can set bounds this way
 
 	def __str__(self):
 		return self.name

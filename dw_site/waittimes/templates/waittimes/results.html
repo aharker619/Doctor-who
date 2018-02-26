@@ -10,22 +10,25 @@
 		{% for total_time, hosp in sort_hosp %}
 			<div>
 				<h3>{{ hosp.name }}</h3>
-				<p>Total time: {{ total_time|floatformat }} minutes<p>
-				<p>Driving time: {{ hosp.driving_time|floatformat }} minutes</p>
-				<p>Predicted wait time: {{ hosp.predicted_wait|floatformat }} minutes</p>
-				{% if hosp.score != -1 %}
-					<p>Average wait time: {{ hosp.score }} minutes<p>
+				{% if total_time != 9999 %}
+					<p>Total time: {{ total_time|floatformat }} minutes<p>
+					<p>Driving time: {{ hosp.driving_time|floatformat }} minutes</p>
+					<p>Predicted wait time: {{ hosp.predicted_wait|floatformat }} minutes</p>
+					{% if hosp.score != -1 %}
+						<p>Average wait time: {{ hosp.score }} minutes<p>
+					{% else %}
+						<p>Average wait time: Not Available</p>
+					{% endif %}
+					<p>Address: {{ hosp.address|title }} {{ hosp.city|title }}, {{ hosp.state }} {{ hosp.zipcode }} </p>
+					<p>Phone Number: {{ hosp.phone_number }}</p> 
+					{% if hosp.hospital_rating != -1 %}
+						<p>Hospital Rating: {{ hosp.hospital_rating }} / 5 </p>
+					{% else %}
+						<p>Hospital Rating: Not Available<p>
+					{% endif %}
 				{% else %}
-					<p>Average wait time: Not Available</p>
+					<p> Cannot drive to hospital </p>
 				{% endif %}
-				<p>Address: {{ hosp.address|title }} {{ hosp.city|title }}, {{ hosp.state }} {{ hosp.zipcode }} </p>
-				<p>Phone Number: {{ hosp.phone_number }}</p> 
-				{% if hosp.hospital_rating != -1 %}
-					<p>Hospital Rating: {{ hosp.hospital_rating }} / 5 </p>
-				{% else %}
-					<p>Hospital Rating: Not Available<p>
-				{% endif %}
-
 			</div>
 		{% endfor %}
 		<div>
