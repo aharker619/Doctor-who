@@ -19,13 +19,17 @@ def user_info(request):
 			user_time = datetime.now()
 			zipcode = form.cleaned_data['zipcode']
 			address = form.cleaned_data['address']
+			user_pain = form.cleaned_data['user_pain']
 			hosp_qs, uc_qs = find_closest(zipcode)
 			hosp_qs = calculate_driving(address, zipcode, hosp_qs)
-			#hosp_qs = predict_waittime(user_time, hosp_qs)
+			# hosp_qs = predict_waittime(user_time, user_pain, hosp_qs)
 			sort_hosp = sort_hospitals(hosp_qs)
+			weather_alert = True # weather_alert(zipcode)
 			# redirect to new URL
 			# https://simpleisbetterthancomplex.com/tips/2016/05/05/django-tip-1-redirect.html
-			return render(request, 'waittimes/results.html', {'zipcode': zipcode, 'sort_hosp': sort_hosp, 'uc_qs': uc_qs})
+			return render(request, 'waittimes/results.html', {'zipcode': 
+				zipcode, 'sort_hosp': sort_hosp, 'uc_qs': uc_qs, 
+				'weather':weather_alert})
 	# if a GET or any other method, create a blank form
 	# this is what happens the first time you visit the URL
 	else:
@@ -33,9 +37,14 @@ def user_info(request):
 	return render(request, 'waittimes/user_info.html', {'form': form})
 
 
-def results(request, zipcode, sort_hosp, uc_qs):
-	return render(request, 'results.html', {'zipcode': zipcode, 'sort_hosp': sort_hosp, 
-				  'uc_qs': uc_qs})
+def results(request, zipcode, sort_hosp, uc_qs, weather):
+	return render(request, 'waittimes/results.html', {'zipcode': zipcode, 'sort_hosp': sort_hosp, 
+				  'uc_qs': uc_qs, 'weather': weather_alert})
+
+
+def uc_fyi(request):
+	return render(request, 'waittimes/uc_fyi.html') 
+
 
 def index(request):
-	return HttpResponse("This is the index page")
+	return redirect('user_info')

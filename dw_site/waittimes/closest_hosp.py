@@ -17,14 +17,16 @@ def find_closest(zipcode):
 	lng = my_zip.lng
 
 	# get queryset as list for hospitals
-	hosp_qs = EmergencyDept.objects.nearby(lat, lng, 1000)
+	hosp_qs = EmergencyDept.objects.rough_filter(lat, 
+									lng).nearby(lat, lng, 800)
 	if len(hosp_qs) > 5:
 		hosp_qs = hosp_qs[:5]
 	else: 
 		hosp_qs = list(hosp_qs)
 
 	# get queryset as list for urgent care
-	uc_qs = UrgentCare.objects.nearby(lat, lng, 1000)
+	uc_qs = UrgentCare.objects.rough_filter(lat, 
+							   lng).nearby(lat, lng, 1000)
 	if len(uc_qs) > 0:
 		uc_qs = uc_qs[0]
 

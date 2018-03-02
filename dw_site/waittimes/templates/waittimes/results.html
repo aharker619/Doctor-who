@@ -1,16 +1,24 @@
 <!-- https://tutorial.djangogirls.org/en/django_templates/ -->
 <html>
 	<head>
-		<title> Results </title>
+		<title>Results</title>
 	</head>
 	<body>
 		<div>
 			<h2>Emergency Department Results for {{ zipcode }}</h2>
 		</div>
+		{% if weather == True %}
+			<div style="color: #FFFFFF; background-color: #800000; padding-bottom:8px; padding-left:8px; padding-right:8px; padding-top:8px;">
+			</a><b>Weather alert</b><br/>
+			Your area is experiencing weather conditions that could affect your wait time.
+			</div>
+		<div>
+			<p> The following are the five closest hospitals within 800 km. We have sorted them based on total time which includes driving time and predicted wait time.</p>
+		{% endif %}
 		{% for total_time, hosp in sort_hosp %}
 			<div>
-				<h3>{{ hosp.name }}</h3>
 				{% if total_time != 9999 %}
+					<h3>{{ hosp.name }}</h3>
 					<p>Total time: {{ total_time|floatformat }} minutes<p>
 					<p>Driving time: {{ hosp.driving_time|floatformat }} minutes</p>
 					<p>Predicted wait time: {{ hosp.predicted_wait|floatformat }} minutes</p>
@@ -26,11 +34,11 @@
 					{% else %}
 						<p>Hospital Rating: Not Available<p>
 					{% endif %}
-				{% else %}
-					<p> Cannot drive to hospital </p>
 				{% endif %}
 			</div>
 		{% endfor %}
+		</div>
+		{% if uc_qs %}
 		<div>
 			<h2>Urgent Care Results for {{ zipcode }}</h2>
 		</div>
@@ -39,6 +47,9 @@
 			<p>Address: {{ uc_qs.address|title }} {{ uc_qs.address2|title }} {{ uc_qs.city|title }}, {{ uc_qs.state }} {{ uc_qs.zipcode }} </p>
 			<p>Phone Number: {{ uc_qs.telephone }}</p>
 		</div>
+		{% endif %}
+		<div>
+			<p style="font-size:12px">The driving times are gathered from Google Maps API and the hospital information including the average wait time is from the Medicare Hospital Compare database. Urgent Care information is gathered from the Homeland Infrastructure Foundation.</p>
 	</body>
 
 

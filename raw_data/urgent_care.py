@@ -14,8 +14,11 @@ def load_uc_data(save = False, output_file = ''):
 	rename_cols = cols[1:8] + ['LNG', 'LAT']
 	lower_cols = [i.lower() for i in rename_cols]
 	
-	uc_data = pd.read_csv(filename, usecols = cols, index_col = 'ID')
+	uc_data = pd.read_csv(filename, usecols = cols, dtype = {'ZIP': str}, 
+						  index_col = 'ID')
 	uc_data.columns = lower_cols
+	uc_data['zip'] = uc_data['zip'].apply(lambda x: x.zfill(5))
+
 	if save:
 		uc_data.to_csv(output_file, sep = '|')
 	

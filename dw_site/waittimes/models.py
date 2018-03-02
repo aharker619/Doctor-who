@@ -19,7 +19,19 @@ def extend_sqlite(connection = None, **kwargs):
 
 # reference https://stackoverflow.com/questions/19703975/django-sort-by-distance/26219292#26219292
 # used haversine formula from Pa3
-class LocationManager(models.Manager):
+# https://simpleisbetterthancomplex.com/tips/2016/08/16/django-tip-11-custom-manager-with-chainable-querysets.html
+	
+class LocationQuerySet(models.QuerySet):
+	def rough_filter(self, lat, lng):
+		lat1 = lat - 5
+		lat2 = lat + 5
+		lng1 = lng - 6
+		lng2 = lng + 6
+		
+		return self.filter(lat__range =  (lat1, lat2), 
+										  lng__range = (lng1, lng2))
+
+
 	def nearby(self, lat, lng, radius):
 		'''
 		Get queryset of locations within the given radius
@@ -35,10 +47,10 @@ class LocationManager(models.Manager):
 					radians(%s) - radians(lng)) / 2), 2)))
 					"""
 
-		return self.get_queryset()\
-				   .annotate(distance = RawSQL(haversine, (lat, lat, lng)))\
+		return self.annotate(distance = RawSQL(haversine, (lat, lat, lng)))\
 				   .filter(distance__lt = radius)\
 				   .order_by('distance')
+
 
 
 class EmergencyDept(models.Model):
@@ -67,9 +79,7 @@ class EmergencyDept(models.Model):
 	driving_time = models.FloatField(default = 0)
 	predicted_wait = models.FloatField(default = 0) 
 
-	objects = LocationManager()
-	# https://docs.djangoproject.com/en/2.0/topics/db/managers/
-	# from_queryset see if you can set bounds this way
+	objects = LocationQuerySet().as_manager()
 
 	def __str__(self):
 		return self.name
@@ -99,7 +109,7 @@ class UrgentCare(models.Model):
 	lng = models.FloatField()
 	lat = models.FloatField()
 
-	objects = LocationManager()
+	objects = LocationQuerySet().as_manager()
 	
 	def __str__(self):
 		return self.name
