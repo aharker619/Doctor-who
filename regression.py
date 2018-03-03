@@ -9,15 +9,15 @@
 import numpy as np
 import matplotlib.pylab as plt
 import pandas as pd
+import sklearn
 from sklearn import linear_model
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors.kde import KernelDensity
+from sklearn.ensemble import RandomForestClassifier
 
-VAR = ['ARRTIME', 'AVGWAIT', 'MSA', 'PAINSCALE']
+VAR = ['ARRTIME', 'MSA', 'PAINSCALE']
 MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 'SEPT', 'OCT', 'NOV', 'DEC']
 WDAY = ['MON', 'TUE', 'WED', 'THUR', 'FRI','SAT', 'SUN']
-ALLVAR = VAR + MONTHS + WDAY
 
 def clean_data(FILENAME):
     '''
@@ -36,7 +36,7 @@ def clean_data(FILENAME):
 
     #generate avg waittime for every hosiptal
     df.loc[:,'AVGWAIT'] = df.loc[:,'WAITTIME'].groupby(df.loc[:,'HOSPCODE']).transform('mean')
-
+    
     #generate dummy var for month and day of the week
     dummies = pd.get_dummies(df['VMONTH']).rename(columns=lambda x: 'MONTH' + str(x))
     dummies.columns = MONTHS
@@ -47,10 +47,35 @@ def clean_data(FILENAME):
     dummies.columns = WDAY
     df = pd.concat([df, dummies], axis=1)
     df.drop(['VDAYR'], inplace=True, axis=1)
+
+    df.drop(['HOSPCODE'], inplace=True, axis=1)
+    df.drop(['YEAR'], inplace=True, axis=1)
     return df
 
 
-def split_data(dataset, indepv=ALLVAR):
+def fandomforest(df):
+    y = df["WAITTIME"]
+    indepv = WDAY + MONTHS + VAR
+    x = df[indepv]
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3)
+    
+     #create and train the random forest
+    #multi-core CPUs can use: rf = RandomForestClassifier(n_estimators=100, n_jobs=2)
+    rf = RandomForestClassifier(n_estimators=100)
+    rf.fit(x_train, y_train)
+    predictions = rf.predict(x_test)
+    # plot
+    plt.scatter(y_test, predictions)
+    plt.xlabel("True waittime")
+    plt.ylabel("Predicted waittime")
+    plt.axis()
+    plt.show()
+
+    print('RandomForest Score:', rf.score(x_test, y_test), rf.score(x_train, y_train))
+    #return predictions, x_test, y_test
+
+
+def ols(dataset, indepv):
     '''
     dataset: data frame of nhamcs data, cleaned
     '''
@@ -66,8 +91,6 @@ def split_data(dataset, indepv=ALLVAR):
     ols_model = ols.fit(x_train, y_train)
     predictions = ols.predict(x_test)
 
-    #print('predictions', predictions)
-
     # plot
     plt.scatter(y_test, predictions)
     plt.xlabel("True Values")
@@ -79,7 +102,30 @@ def split_data(dataset, indepv=ALLVAR):
     #return predictions, x_test, y_test
 
 
-def kernel_reg(df, bw=90, indepv="ARRTIME"):
+def logit(dataset, indepv):
+    '''
+    dataset: data frame of nhamcs data, cleaned
+    '''
+    y = dataset["WAITTIME"]
+    x = dataset[indepv]
+
+    # get train/test data
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3)
+    log = linear_model.LogisticRegression()
+    log_model = log.fit(x_train, y_train)
+    predictions = log_model.predict(x_test)
+
+    # plot
+    plt.scatter(y_test, predictions)
+    plt.xlabel("True Values")
+    plt.ylabel("Predictions")
+    plt.axis()
+    plt.show()
+
+    print('Logit Score:', log_model.score(x_test, y_test), log_model.score(x_train, y_train))
+
+
+def kernel_reg(df, bw=30, indepv="ARRTIME", kernel='gaussian'):
     '''
     Make various KDEs that using 3 different kernels and bandwidths 
     
@@ -92,30 +138,21 @@ def kernel_reg(df, bw=90, indepv="ARRTIME"):
     '''
     y = df["WAITTIME"]
     x = df[indepv]
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.5)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3)
 
     train = pd.concat([x_train, y_train], axis=1)
     test = pd.concat([x_test, y_test], axis=1)
-    
     #kernel density estimations
-    
-    #instantiate and fit the KDE model
-    kernel='epanechnikov'
-    kde = KernelDensity(kernel=kernel, bandwidth=bw).fit(train)
-    #score_samples returns the log of the probability density
-    est = kde.score_samples(test)
-    plt.scatter(y_test, est, label='%s, bw=%s' % (kernel, bw))
-    plt.legend(loc=0)
 
-    kernel='gaussian'
+    # instantiate and fit the KDE model
     kde = KernelDensity(kernel=kernel, bandwidth=bw).fit(train)
-    est = kde.score_samples(test)
-    plt.scatter(y_test, est, label='%s, bw=%s' % (kernel, bw))
-    plt.legend(loc=0)
-
-    kernel='tophat'
-    kde = KernelDensity(kernel=kernel, bandwidth=bw).fit(train)
-    est = kde.score_samples(test)
-    plt.scatter(y_test, est, label='%s, bw=%s' % (kernel, bw))
+    # score_samples returns the log of the probability density
+    logprob = kde.score_samples(test)
+    plt.scatter(y_test, logprob, label='%s, bw=%s' % (kernel, bw))
     plt.legend(loc=0)
     plt.show()
+
+
+
+
+
