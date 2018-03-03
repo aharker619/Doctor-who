@@ -5,6 +5,7 @@
 # kernel reg code gathered from 
 #https://stats.stackexchange.com/questions/218514/how-to-decide-whether-a-kernel-density-estimate-is-good
 #https://jakevdp.github.io/PythonDataScienceHandbook/05.13-kernel-density-estimation.html
+#https://www.kaggle.com/c/digit-recognizer/discussion/2299
 
 import numpy as np
 import matplotlib.pylab as plt
