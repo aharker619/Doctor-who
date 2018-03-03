@@ -54,7 +54,7 @@ def clean_data(FILENAME):
     return df
 
 
-def fandomforest(df):
+def randomforest(df):
     y = df["WAITTIME"]
     indepv = WDAY + MONTHS + VAR
     x = df[indepv]
