@@ -1,0 +1,28 @@
+import requests
+
+def temp_description(zip_code):
+    '''
+    Given a zip code, returns the current temperature in celcius,
+        and a description of the weather outside
+        
+    Input: zip_code (integer, or string)
+    
+    Return: (description, temp_celcius)
+        description: description of weather (string)
+        temp_celsius: temperature in celcius (string)
+        
+    Exception:
+        if zip_code not in USA, then returns (-1, -1)
+    '''
+    zip_code = str(zip_code)
+    api_key = '3f180d31de6b4b363583654168714937'
+    link = 'http://api.openweathermap.org/data/2.5/weather?appid=' + api_key + '&zip=' + zip_code 
+    json_data = requests.get(link).json()
+    
+    if len(json_data) > 2:
+        description = json_data['weather'][0]['description']
+        temp_celcius = '{:0.2f}'.format(json_data['main']['temp'] - 273.15)
+
+        return (description, temp_celcius)
+    else:
+        return (-1, -1)
