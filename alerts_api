@@ -8,6 +8,9 @@ def alerts(zip_code):
     Input: zip_code (as integer or string)
     
     Result: prints the number of alerts, along with the alerts (if any)
+    
+    
+    Total number of calls allowed per day through wunderground alerts api: 500
     '''
     
     zip_code = str(zip_code)
