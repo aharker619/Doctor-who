@@ -9,29 +9,26 @@ from waittimes.get_distance_duration import calculate_driving
 from .forms import UserForm
 
 def user_info(request):
-	# if this is a POST request we need to process the form data
 	if request.method == 'POST':
 		# create a form instance and populate it with data from the request
 		form = UserForm(request.POST)
 		# check whether it's valid:
 		if form.is_valid():
-			# get current local time
 			user_time = datetime.now()
 			zipcode = form.cleaned_data['zipcode']
 			address = form.cleaned_data['address']
 			user_pain = form.cleaned_data['user_pain']
+			# find closest hospitals, calculate driving time, predict waittime
 			hosp_qs, uc_qs = find_closest(zipcode)
 			hosp_qs = calculate_driving(address, zipcode, hosp_qs)
 			# hosp_qs = predict_waittime(user_time, user_pain, hosp_qs)
 			sort_hosp = sort_hospitals(hosp_qs)
-			weather_alert = True # weather_alert(zipcode)
-			# redirect to new URL
-			# https://simpleisbetterthancomplex.com/tips/2016/05/05/django-tip-1-redirect.html
+			# check local weather
+			weather = (True, ['test', 'test2'])
 			return render(request, 'waittimes/results.html', {'zipcode': 
 				zipcode, 'sort_hosp': sort_hosp, 'uc_qs': uc_qs, 
-				'weather':weather_alert})
+				'weather':weather})
 	# if a GET or any other method, create a blank form
-	# this is what happens the first time you visit the URL
 	else:
 		form = UserForm()
 	return render(request, 'waittimes/user_info.html', {'form': form})
@@ -39,11 +36,16 @@ def user_info(request):
 
 def results(request, zipcode, sort_hosp, uc_qs, weather):
 	return render(request, 'waittimes/results.html', {'zipcode': zipcode, 'sort_hosp': sort_hosp, 
-				  'uc_qs': uc_qs, 'weather': weather_alert})
+				  'uc_qs': uc_qs, 'weather': weather})
 
 
 def uc_fyi(request):
 	return render(request, 'waittimes/uc_fyi.html') 
+
+
+def weather_alert(request, zipcode, weather):
+	desc, alerts = weather
+	return render(request, 'waittimes/weather.html', {'zipcode': zipcode, 'weather': alerts})	
 
 
 def index(request):

@@ -1,0 +1,12 @@
+<html>
+	<head>
+		<title>Weather alerts</title>
+	</head>
+	<body>
+		<div>
+			<h2>Weather Alerts</h2>
+		</div>
+		{% for alert in weather.alerts %}
+			<div>
+				<h3>{{ alert.name }}</h3>
+				<p>Anything else?<p>
