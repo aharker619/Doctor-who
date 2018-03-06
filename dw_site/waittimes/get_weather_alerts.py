@@ -98,7 +98,7 @@ def alerts(zip_code):
         
     alerts = []
     for row in json_data['alerts']:
-        alert = row['message'].replace('\n', '&#10;')
+        alert = row['message'].replace('\n', ' ')
         alerts.append(alert)
         
     return alerts
