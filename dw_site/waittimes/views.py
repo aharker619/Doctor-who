@@ -10,7 +10,7 @@ import regression
 from .forms import UserForm
 
 df = regression.clean_data("nhamcs_all_data.csv")
-model = regression.rf(df)
+model = regression.ols_reg(df)
 
 def user_info(request):
 	if request.method == 'POST':
@@ -33,7 +33,9 @@ def user_info(request):
 		        x = x[:len(hosp_qs)]
 			hosp_qs = calculate_driving(address, zipcode, hosp_qs)
 			predictions = model.predict(x)
-			sort_hosp = sort_hospitals(predictions)
+			for prediction in predictions:
+				hosp_qs[i].predicted_wait = prediction
+			sort_hosp = sort_hospitals(hosp_qs)
 			# check local weather
 			weather = (True, ['test', 'test2'])
 			return render(request, 'waittimes/results.html', {'zipcode': 
