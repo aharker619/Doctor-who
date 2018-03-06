@@ -2,13 +2,14 @@ import requests
 
 def alerts(zip_code):
     '''
-    Given a zip_code, prints the number of alerts issued for that particular zip_code at the time,
-        along with the alerts.
+    Given a zip_code, returns the number of alerts issued for that particular zip_code at the time,
+        along with the alerts as a list.
         
     Input: zip_code (as integer or string)
     
-    Result: prints the number of alerts, along with the alerts (if any)
-    
+    Result: returns a tuple of (the number of alerts, list of alerts (if any))
+            If no alerts, returns (0, [])
+            
     Total number of calls allowed per day through wunderground alerts api: 500
     '''
     
@@ -17,7 +18,9 @@ def alerts(zip_code):
     link = 'http://api.wunderground.com/api/' + api_key + '/alerts/q/' + zip_code + '.json'
     
     json_data = requests.get(link).json()
-    
-    print ('Number of alerts: ', (len(json_data['alerts'])))
+        
+    alerts = []
     for row in json_data['alerts']:
-        print (row['message'])
+        alerts.append(row['message'])
+        
+    return (len(json_data['alerts']), alerts)
