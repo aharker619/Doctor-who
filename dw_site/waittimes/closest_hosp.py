@@ -1,4 +1,5 @@
 from waittimes.models import EmergencyDept, UrgentCare, ZipLocation
+from django.shortcuts import get_object_or_404
 
 def find_closest(zipcode):
 	'''
@@ -12,7 +13,7 @@ def find_closest(zipcode):
 		return ([], [])
 
 	# convert zipcode to lat/long
-	my_zip = ZipLocation.objects.get(zipcode = zipcode)
+	my_zip = get_object_or_404(ZipLocation, zipcode = zipcode)
 	lat = my_zip.lat
 	lng = my_zip.lng
 
