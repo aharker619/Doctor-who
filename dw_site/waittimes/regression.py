@@ -65,7 +65,7 @@ def ols_reg(df):
 def rf(df):
     y = df["WAITTIME"]
     x = df[indepv]
-    model = RandomForestClassifier(n_estimators=100)
+    model = RandomForestClassifier(n_estimators=10)
     model.fit(x, y)
     return model
 
@@ -99,7 +99,7 @@ def randomforest(df):
     
     #create and train the random forest
     #multi-core CPUs can use: rf = RandomForestClassifier(n_estimators=100, n_jobs=2)
-    rf = RandomForestClassifier(n_estimators=100)
+    rf = RandomForestClassifier(n_estimators=10)
     rf.fit(x_train, y_train)
     predictions = rf.predict(x_test)
     # plot

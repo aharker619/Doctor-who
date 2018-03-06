@@ -10,32 +10,19 @@ import waittimes.regression as regression
 
 from .forms import UserForm
 
-df = regression.clean_data("waittimes/nhamcs_all_data.csv")
-model = regression.rf(df)
-
 def user_info(request):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request
         form = UserForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            # get current local time
-            x = regression.user_time(df)
             zipcode = form.cleaned_data['zipcode']
             address = form.cleaned_data['address']
             user_pain = form.cleaned_data['user_pain']
-            x["PAINSCALE"] = user_pain
             # find closest hospitals, calculate driving time, predict waittime
             hosp_qs, uc_qs = find_closest(zipcode)
-            for i in range(len(hosp_qs)):
-                x.loc[i, "AVGWAIT"] = hosp_qs[i].score
-                if hosp_qs[i].msa == "Metropolitan Statistical Area":
-                    x.loc[i, "MSA"] = 1
-                x = x[:len(hosp_qs)]
             hosp_qs = calculate_driving(address, zipcode, hosp_qs)
-            predictions = model.predict(x)
-            for prediction in predictions:
-                hosp_qs[i].predicted_wait = prediction
+            # hosp_qs = run_regression(user_pain, hosp_qs)
             sort_hosp = sort_hospitals(hosp_qs)
             # check local weather
             weather = check_weather(zipcode)

@@ -27,6 +27,7 @@
                         <p>Average wait time: {{ hosp.score }} minutes<p>
                     {% else %}
                         <p>Average wait time: Not Available</p>
+                        <p>Median wait time for all ED: 42 minutes</p>
                     {% endif %}
                     <p>Address: {{ hosp.address|title }} {{ hosp.city|title }}, {{ hosp.state }} {{ hosp.zipcode }} </p>
                     <p>Phone Number: {{ hosp.phone_number }}</p> 
