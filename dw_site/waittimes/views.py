@@ -33,7 +33,7 @@ def user_info(request):
 		        x = x[:len(hosp_qs)]
 			hosp_qs = calculate_driving(address, zipcode, hosp_qs)
 			predictions = model.predict(x)
-			sort_hosp = sort_hospitals(hosp_qs)
+			sort_hosp = sort_hospitals(predictions)
 			# check local weather
 			weather = (True, ['test', 'test2'])
 			return render(request, 'waittimes/results.html', {'zipcode': 
