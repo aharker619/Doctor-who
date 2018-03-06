@@ -55,6 +55,14 @@ def clean_data(FILENAME):
     return df
 
 
+def ols_reg(df):
+    y = df["WAITTIME"]
+    x = df[indepv]
+    ols = linear_model.LinearRegression()
+    ols_model = ols.fit(x, y)
+    return model
+
+
 def rf(df):
     y = df["WAITTIME"]
     x = df[indepv]
