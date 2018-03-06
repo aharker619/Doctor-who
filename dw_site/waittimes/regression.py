@@ -60,7 +60,7 @@ def ols_reg(df):
     x = df[indepv]
     ols = linear_model.LinearRegression()
     ols_model = ols.fit(x, y)
-    return osl_model
+    return ols_model
 
 
 def rf(df):
