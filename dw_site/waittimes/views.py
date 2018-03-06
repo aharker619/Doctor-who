@@ -5,8 +5,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from datetime import datetime
 from waittimes.closest_hosp import find_closest, sort_hospitals
 from waittimes.get_distance_duration import calculate_driving
+import regression
 
 from .forms import UserForm
+
+df = regression.clean_data("nhamcs_all_data.csv")
+model = regression.rf(df)
 
 def user_info(request):
 	if request.method == 'POST':
@@ -14,14 +18,21 @@ def user_info(request):
 		form = UserForm(request.POST)
 		# check whether it's valid:
 		if form.is_valid():
-			user_time = datetime.now()
+                # get current local time
+                        x = regression.user_time(df)
 			zipcode = form.cleaned_data['zipcode']
 			address = form.cleaned_data['address']
 			user_pain = form.cleaned_data['user_pain']
+			x["PAINSCALE"] = user_pain
 			# find closest hospitals, calculate driving time, predict waittime
 			hosp_qs, uc_qs = find_closest(zipcode)
+			for i in range(len(hosp_qs)):
+				x.loc[i, "AVGWAIT"] = hosp_qs[i].score
+				if hosp_qs[i].msa == "Metropolitan Statistical Area":
+					x.loc[i, "MSA"] = 1
+		        x = x[:len(hosp_qs)]
 			hosp_qs = calculate_driving(address, zipcode, hosp_qs)
-			# hosp_qs = predict_waittime(user_time, user_pain, hosp_qs)
+			predictions = model.predict(x)
 			sort_hosp = sort_hospitals(hosp_qs)
 			# check local weather
 			weather = (True, ['test', 'test2'])
