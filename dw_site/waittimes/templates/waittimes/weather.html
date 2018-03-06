@@ -6,7 +6,8 @@
 		<div>
 			<h2>Weather Alerts</h2>
 		</div>
-		{% for alert in weather.alerts %}
+		{% for alert in weather %}
 			<div>
-				<h3>{{ alert.name }}</h3>
+				<h3>{{ alert }}</h3>
 				<p>Anything else?<p>
+		{% endfor %}

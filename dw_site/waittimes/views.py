@@ -57,9 +57,10 @@ def uc_fyi(request):
 
 
 def weather_alert(request, zipcode, weather):
-    desc, alerts = weather
+    alerts_pre = weather.split(',')
+    alerts = [alert.strip("[]' ") for alert in alerts_pre]
     return render(request, 'waittimes/weather.html', {'zipcode': zipcode, 'weather': alerts})   
 
 
 def index(request):
-    return redirect('user_info')
+    return redirect('waittimes:user_info')
