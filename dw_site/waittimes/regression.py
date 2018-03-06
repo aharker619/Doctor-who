@@ -17,7 +17,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors.kde import KernelDensity
 from sklearn.ensemble import RandomForestClassifier
 
-VAR = ['ARRTIME','AVGWAIT' 'MSA', 'PAINSCALE']
+VAR = ['ARRTIME','AVGWAIT', 'MSA', 'PAINSCALE']
 MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 'SEPT', 'OCT', 'NOV', 'DEC']
 WDAY = ['MON', 'TUE', 'WED', 'THUR', 'FRI','SAT', 'SUN']
 indepv = WDAY + MONTHS + VAR
