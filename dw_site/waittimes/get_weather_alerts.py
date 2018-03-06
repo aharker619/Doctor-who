@@ -30,19 +30,19 @@ def temp_description(zip_code):
 
         temp_f = (9 / 5 * (json_data['main']['temp'] - 273.15)) + 32
         wind_mph = json_data['wind']['speed'] * 2.23694
-        
+
         if temp_f >= 80:
             humidity = json_data['main']['humidity']
             heat_index = calc_heat_index(temp_f, humidity)
             if heat_index >= 105:
                 heat_warning = "Heat advisory: the heat index is {}.".format(heat_index)
                 description.append(heat_warning)
-        if temp_f <= 50 and wind_mph > 3:
+        elif temp_f <= 50 and wind_mph > 3:
             wind_chill = calc_wind_chill(temp_f, wind_mph)
             if wind_chill < -20:
                 chill_warning = "Wind Chill advisory: the wind chill is {}.".format(wind_chill)
                 description.append(chill_warning)
-    
+
     return description
 
 
@@ -98,7 +98,8 @@ def alerts(zip_code):
         
     alerts = []
     for row in json_data['alerts']:
-        alerts.append(row['message'])
+        alert = row['message'].replace('\n', ' ')
+        alerts.append(alert)
         
     return alerts
 
@@ -108,7 +109,9 @@ def check_weather(zip_code):
     Check for extreme weather, high heat index, low wind chill, 
     and weather alerts for a given zipcode
     '''
-    current_weather = temp_description(zip_code)
     alert = alerts(zip_code)
-
-    return current_weather + alert
+    if not alert:
+        current_weather = temp_description(zip_code)
+        return current_weather
+    else:
+        return alert

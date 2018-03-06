@@ -11,7 +11,7 @@ import waittimes.regression as regression
 from .forms import UserForm
 
 df = regression.clean_data("waittimes/nhamcs_all_data.csv")
-model = regression.ols_reg(df)
+model = regression.rf(df)
 
 def user_info(request):
     if request.method == 'POST':
@@ -58,7 +58,7 @@ def uc_fyi(request):
 
 
 def weather_alert(request, zipcode, weather):
-    alerts_pre = weather.split(',')
+    alerts_pre = weather.split("', ")
     alerts = [alert.strip("[]' ") for alert in alerts_pre]
     return render(request, 'waittimes/weather.html', {'zipcode': zipcode, 'weather': alerts})   
 
