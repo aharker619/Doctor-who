@@ -10,7 +10,6 @@
 import numpy as np
 import matplotlib.pylab as plt
 import pandas as pd
-import sklearn
 from datetime import datetime
 from sklearn import linear_model
 from sklearn.model_selection import train_test_split

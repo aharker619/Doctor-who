@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from datetime import datetime
 from waittimes.closest_hosp import find_closest, sort_hospitals
 from waittimes.get_distance_duration import calculate_driving
+from waittimes.get_weather_alerts import check_weather
 import waittimes.regression as regression
 
 from .forms import UserForm
@@ -37,7 +38,7 @@ def user_info(request):
                 hosp_qs[i].predicted_wait = prediction
             sort_hosp = sort_hospitals(hosp_qs)
             # check local weather
-            weather = (True, ['test', 'test2'])
+            weather = check_weather(zipcode)
             return render(request, 'waittimes/results.html', {'zipcode': 
                 zipcode, 'sort_hosp': sort_hosp, 'uc_qs': uc_qs, 
                 'weather':weather})
