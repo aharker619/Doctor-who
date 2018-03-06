@@ -9,7 +9,7 @@ import waittimes.regression as regression
 
 from .forms import UserForm
 
-df = regression.clean_data("nhamcs_all_data.csv")
+df = regression.clean_data("waittimes/nhamcs_all_data.csv")
 model = regression.ols_reg(df)
 
 def user_info(request):
