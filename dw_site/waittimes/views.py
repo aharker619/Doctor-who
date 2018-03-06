@@ -7,8 +7,11 @@ from waittimes.closest_hosp import find_closest, sort_hospitals
 from waittimes.get_distance_duration import calculate_driving
 from waittimes.get_weather_alerts import check_weather
 import waittimes.regression as regression
+import waittimes.run_regression as run_regression
 
 from .forms import UserForm
+
+model, df = run_regression.find_model()
 
 def user_info(request):
     if request.method == 'POST':
@@ -22,7 +25,7 @@ def user_info(request):
             # find closest hospitals, calculate driving time, predict waittime
             hosp_qs, uc_qs = find_closest(zipcode)
             hosp_qs = calculate_driving(address, zipcode, hosp_qs)
-            # hosp_qs = run_regression(user_pain, hosp_qs)
+            hosp_qs = run_regression.run_regression(user_pain, hosp_qs, model, df)
             sort_hosp = sort_hospitals(hosp_qs)
             # check local weather
             weather = check_weather(zipcode)
