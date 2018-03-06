@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from datetime import datetime
 from waittimes.closest_hosp import find_closest, sort_hospitals
 from waittimes.get_distance_duration import calculate_driving
-import regression
+import waittimes.regression as regression
 
 from .forms import UserForm
 

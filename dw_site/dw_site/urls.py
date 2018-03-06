@@ -17,6 +17,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-	path('waittimes/', include('waittimes.urls')),
+    path('waittimes/', include('waittimes.urls')),
     path('admin/', admin.site.urls),
 ]
