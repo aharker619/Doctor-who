@@ -7,6 +7,7 @@
 #https://jakevdp.github.io/PythonDataScienceHandbook/05.13-kernel-density-estimation.html
 #https://www.kaggle.com/c/digit-recognizer/discussion/2299
 
+import pickle
 import numpy as np
 import matplotlib.pylab as plt
 import pandas as pd
@@ -59,15 +60,22 @@ def ols_reg(df):
     x = df[indepv]
     ols = linear_model.LinearRegression()
     ols_model = ols.fit(x, y)
-    return ols_model
+    # save the model to disk
+    filename = 'finalized_model.sav'
+    pickle.dump(model, open(filename, 'wb'))
 
 
 def rf(df):
     y = df["WAITTIME"]
     x = df[indepv]
-    model = RandomForestClassifier(n_estimators=10)
-    model.fit(x, y)
-    return model
+    rf_model = RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=5, max_features=5, max_leaf_nodes=None,
+            min_impurity_split=1e-07, min_samples_leaf=50,
+            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            n_estimators=10, n_jobs=1, oob_score=False,
+            verbose=0, warm_start=False)
+    rf_model.fit(x, y)
+    return rf_model
 
 
 def user_time(df):
@@ -90,7 +98,7 @@ def user_time(df):
 
 
 ###############################################################################
-#The regressions we have tried...
+#########################The regressions we have tried...######################
 
 def randomforest(df):
     y = df["WAITTIME"]
@@ -98,7 +106,6 @@ def randomforest(df):
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3)
     
     #create and train the random forest
-    #multi-core CPUs can use: rf = RandomForestClassifier(n_estimators=100, n_jobs=2)
     rf = RandomForestClassifier(n_estimators=10)
     rf.fit(x_train, y_train)
     predictions = rf.predict(x_test)
@@ -121,7 +128,6 @@ def ols(dataset, indepv):
 
     # get train/test data
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3)
-
 
     # fit a OLS model
     ols = linear_model.LinearRegression()
