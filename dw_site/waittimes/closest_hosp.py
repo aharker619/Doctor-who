@@ -15,7 +15,7 @@ def find_closest(zipcode):
         return ([], [])
 
     # convert zipcode to lat/long
-    my_zip = get_object_or_404(ZipLocation, zipcode = zipcode)
+    my_zip = ZipLocation.objects.get(zipcode = zipcode)
     lat = my_zip.lat
     lng = my_zip.lng
 
