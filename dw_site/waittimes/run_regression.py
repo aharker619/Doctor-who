@@ -1,10 +1,13 @@
 import waittimes.regression as regression
+import pickle
 
 MEDIAN_AVGWAIT = 42
+filename = 'finalized_model.sav'
 
 def find_model():
     df = regression.clean_data("waittimes/nhamcs_all_data.csv")
-    model = regression.rf(df)
+    # load the model from disk
+    model = pickle.load(open(filename, 'rb'))
     return model, df
 
 
