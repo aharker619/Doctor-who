@@ -1,4 +1,4 @@
-import requests
+simport requests
 from math import sqrt, pow
 
 def temp_description(zip_code):
@@ -109,8 +109,9 @@ def alerts(zip_code):
     link = 'http://api.wunderground.com/api/' + api_key + '/alerts/q/' + zip_code + '.json'
     
     json_data = requests.get(link).json()
-        
+    
     alerts = []
+
     for row in json_data['alerts']:
         alert = row['message']
         alerts.append(alert)

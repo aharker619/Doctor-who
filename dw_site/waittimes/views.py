@@ -11,7 +11,7 @@ import waittimes.run_regression as run_regression
 
 from .forms import UserForm
 
-model, df = run_regression.find_model()
+model, x = run_regression.find_model()
 
 def user_info(request):
     if request.method == 'POST':
@@ -25,7 +25,7 @@ def user_info(request):
             # find closest hospitals, calculate driving time, predict waittime
             hosp_qs, uc_qs = find_closest(zipcode)
             hosp_qs = calculate_driving(address, zipcode, hosp_qs)
-            hosp_qs = run_regression.run_regression(user_pain, hosp_qs, model, df)
+            hosp_qs = run_regression.run_regression(user_pain, hosp_qs, model, x)
             sort_hosp = sort_hospitals(hosp_qs)
             # check local weather
             weather = check_weather(zipcode)
@@ -50,9 +50,11 @@ def uc_fyi(request):
 def weather_alert(request, zipcode, weather):
     alerts_pre = weather.split("', ")
     alerts = [alert.strip("[]' ") for alert in alerts_pre]
-    alerts = ['\n'.join(alert.replace("\n", " ").split('*')) for alert in alerts]
+    alerts = ['\n'.join(alert.replace("\\n", " ").split('*')) for alert in alerts]
     return render(request, 'waittimes/weather.html', {'zipcode': zipcode, 'weather': alerts})   
 
 
 def index(request):
     return redirect('waittimes:user_info')
+
+
