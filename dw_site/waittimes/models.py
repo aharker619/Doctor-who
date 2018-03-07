@@ -115,27 +115,6 @@ class UrgentCare(models.Model):
         return self.name
 
 
-class PatientWaittime(models.Model):
-    '''
-    Database describing patient wait times in select EDs
-    
-    Data gathered from NHAMCS 
-    '''
-    patient_id = models.IntegerField(primary_key = True)
-    visit_month = models.IntegerField()
-    visit_day = models.IntegerField()
-    arrival_time = models.IntegerField()
-    wait_time = models.IntegerField()
-    immediacy = models.IntegerField()
-    painscale = models.IntegerField()
-    blinded_hospital_code = models.IntegerField()
-    metro_area = models.FloatField(default = 0)
-    year = models.IntegerField()
-
-    def __repr__(self):
-        return self.patient_id, self.wait_time
-
-
 class ZipLocation(models.Model):
     '''
     Database connecting zipcodes to latitude and longitude locations

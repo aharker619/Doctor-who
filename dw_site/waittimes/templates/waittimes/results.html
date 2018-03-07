@@ -15,7 +15,7 @@
             </div>
         {% endif %}
         <div>
-            <p> The following are the five closest Emergency Departments within 800 km. The Emergency Departments are sorted based on total time which is the sum of driving time and average wait time. The predicted wait time is based on the current time and date, indicated pain scale, and the hospital location and average wait time.</p>
+            <p> The following are the five closest Emergency Departments within 800 km. The Emergency Departments are sorted based on total time which is the sum of driving time and average wait time. The predicted wait time is based on the current time and date, indicated pain scale, hospital location, and average wait time.</p>
         </div>
         {% for total_time, hosp in sort_hosp %}
             <div>
@@ -53,6 +53,7 @@
         {% endif %}
         <div>
             <p style="font-size:12px">The driving times are gathered from Google Maps API and the hospital information including the average wait time is from the Medicare Hospital Compare database. Urgent Care information is gathered from the Homeland Infrastructure Foundation.</p>
+        </div>
     </body>
 
 

@@ -57,26 +57,6 @@ def load_uc_data():
             unit.save()
 
 
-def load_patient_data():
-    with open('/home/student/Doctor-who/nhamcs_all_data.csv') as csvfile:
-        reader = csv.reader(csvfile)
-        next(reader) 
-        for row in reader:
-            unit = PatientWaittimes()
-            unit.patient_id = row[0]
-            unit.visit_month = row[1]
-            unit.visit_day = row[2]
-            unit.arrival_time = row[3]
-            unit.wait_time = row[4]
-            unit.immediacy = row[5]
-            unit.painscale = row[6]
-            unit.blinded_hospital_code = row[7]
-            unit.metro_area = row[8]
-            unit.year = row[9]
-
-            unit.save()
-
-
 def load_zip_data():
     with open('/home/student/Doctor-who/raw_data/combined_zips.csv') as csvfile:
         reader = csv.reader(csvfile)
