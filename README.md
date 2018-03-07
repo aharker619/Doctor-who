@@ -17,76 +17,76 @@ To operate django web application:
 
 Code Structure:
 -raw_data: 
-    This folder contains python code and csv files for data that were used to either create sqlite databases within django or our predicted wait time regression.
-    -nhamcs data: Alyssa
-        Python Function:
-            -nhamcs.py
-        Input Data:
-            -nhamcsed*.csv is yearly data downloaded from the nhamcs database online, where * is the year
-        Output CSVs:
-            -nhamcs_all_data.csv is all data from all years combined into one csv file
-            -nhamcs_all_years.csv does not include the msa column, combined for all years 
-            -nhamcs_msa_years.csv is only years 2013-2015 which all contain msa column
-            -nhamcs_data.csv is cleaned data for 2015 only   
-    -average wait time hospital data: Amir
-        Python Function:
-            -Timely_Effective_Hospital_Data.py
-        Input Data:
-            -Timely_and_Effective_Care_-_Hospital.csv is data downloaded from medicare.gov
-        Output CSV:
-            -time.csv
-    -general hospital data: Tianchu
-        Python Function:
-            -hospital_info_datafilter.py
-        Input Data:
-            -Hospital_General_Information.csv is data downloaded from medicare.gov
-        Output CSV:
-            -HGI.csv
-    -zipcode data: Alyssa
-        Python Function:
-            -clean_zips.py
-        Input Data:
-            -zipcodes.csv
-            -2015_Gaz_zcta_national.txt
-        Output CSV:
-            -combined_zips.csv
-    -combine hospital information:Tianchu, Alyssa
-        Sqlite Function:
-            -Create tables: create_tb.sql (Tianchu)
-            -Query: combine_hosp.sql (Alyssa)
-        Input Data:
+    - This folder contains python code and csv files for data that were used to either create sqlite databases within django or our predicted wait time regression.
+    - nhamcs data: Alyssa
+        - Python Function:
+            - nhamcs.py
+        - Input Data:
+            - nhamcsed*.csv is yearly data downloaded from the nhamcs database online, where * is the year
+        - Output CSVs:
+            - nhamcs_all_data.csv is all data from all years combined into one csv file
+            - nhamcs_all_years.csv does not include the msa column, combined for all years 
+            - nhamcs_msa_years.csv is only years 2013-2015 which all contain msa column
+            - nhamcs_data.csv is cleaned data for 2015 only   
+    - average wait time hospital data: Amir
+        - Python Function:
+            - Timely_Effective_Hospital_Data.py
+        - Input Data:
+            - Timely_and_Effective_Care_-_Hospital.csv is data downloaded from medicare.gov
+        - Output CSV:
+            - time.csv
+    - general hospital data: Tianchu
+        - Python Function:
+            - hospital_info_datafilter.py
+        - Input Data:
+            - Hospital_General_Information.csv is data downloaded from medicare.gov
+        - Output CSV:
+            - HGI.csv
+    - zipcode data: Alyssa
+        - Python Function:
+            - clean_zips.py
+        - Input Data:
+            - zipcodes.csv
+            - 2015_Gaz_zcta_national.txt
+        - Output CSV:
+            - combined_zips.csv
+    - combine hospital information:Tianchu, Alyssa
+        - Sqlite Function:
+            - Create tables: create_tb.sql (Tianchu)
+            - Query: combine_hosp.sql (Alyssa)
+        - Input Data:
             - for create_tb.sql: time.csv, HGI.csv, combined_zips.csv, msa.csv, and states.csv
-        Output CSV:
+        - Output CSV:
             - ED.csv
-    -urgent care data: Alyssa
-        Python Function:
-            urgent_care.py
-        Input Data:
-            Urgent_Care_Facilities.csv
-        Output CSV:
-            urgent_care_data.csv
+    - urgent care data: Alyssa
+        - Python Function:
+            - urgent_care.py
+        - Input Data:
+            - Urgent_Care_Facilities.csv
+        - Output CSV:
+            - urgent_care_data.csv
 
--dw_site:
-    This folder contains the django project with the single application folder waittimes. Non-django generated files are be described below.
-    Python Function: Alyssa
-        -load_data.py was used to load the data into the sqlite databases for django models
--waittimes:
-    Non-django generated files are described below.
-    Python Functions:
-        -closest_hosp.py: Alyssa
-            -used to query for the 5 closest hospitals and closest urgent care as well as sort the hospitals with closest total time first
-        -forms.py: Alyssa
-            -holds form model for user input
-        -get_distance_duration.py: Amir
-            -used to get GoogleMaps API driving distances between user address and hospital
-        -get_weather_alerts.py: Amir
-            -used to get weather alerts from WeatherUnderground and/or OpenWeatherMaps API
-        -regression.py: Tianchu
-            -python functions for running regression
-        -run_regression.py: Tianchu
-            -python functions for interfacing user input data with regression models and formatting results
-    -templates: Alyssa
-        -folder holds django templates as html files, namespace separated
+- dw_site:
+    - This folder contains the django project with the single application folder waittimes. Non-django generated files are be described below.
+    - Python Function: Alyssa
+        - load_data.py was used to load the data into the sqlite databases for django models
+- waittimes:
+    - Non-django generated files are described below.
+    - Python Functions:
+        - closest_hosp.py: Alyssa
+            - used to query for the 5 closest hospitals and closest urgent care as well as sort the hospitals with closest total time first
+        - forms.py: Alyssa
+            - holds form model for user input
+        - get_distance_duration.py: Amir
+            - used to get GoogleMaps API driving distances between user address and hospital
+        - get_weather_alerts.py: Amir
+            - used to get weather alerts from WeatherUnderground and/or OpenWeatherMaps API
+        - regression.py: Tianchu
+            - python functions for running regression
+        - run_regression.py: Tianchu
+            - python functions for interfacing user input data with regression models and formatting results
+    - templates: Alyssa
+        - folder holds django templates as html files, namespace separated
 - additional modeling files: Alyssa and Tianchu
-    -nhamcs_model.py: Alyssa
-    -NHAMCS_analysis.ipynb: Alyssa and Tianchu
+    - nhamcs_model.py: Alyssa
+    - NHAMCS_analysis.ipynb: Alyssa and Tianchu
