@@ -1,19 +1,19 @@
 <!--template for user input
 https://docs.djangoproject.com/en/2.0/topics/forms/ -->
 <html>
-	<head>
-		<title> ED Wait Time Predictor </title>
-	</head>
-	<body>
-		<div>
-			<h2>Emergency Department Wait Time Predictor</h2>
-		</div>
-		<div>
-			<p> Enter your location information and current pain on a scale from 1 (Very Mild) to 10 (Unimaginable) below. We will use this information to find up to five of the closest Emergency Departments to you as well as the closest Urgent Care location. </p>
-			<a href="/waittimes/uc_fyi.html">Click here for more information on Urgent Cares</a>
-		</div> 
+    <head>
+        <title> ED Wait Time Predictor </title>
+    </head>
+    <body>
+        <div>
+            <h2>Emergency Department Wait Time Predictor</h2>
+        </div>
+        <div>
+            <p> Enter your location information and current pain on a scale from 1 (Very Mild) to 10 (Unimaginable) below. We will use this information to find up to five of the closest Emergency Departments to you as well as the closest Urgent Care location. </p>
+            <a href="/waittimes/uc_fyi.html">Click here for more information on Urgent Cares</a>
+        </div> 
 <form action "/user_input/" method = "post">
-	{% csrf_token %}
-	{{ form.as_p }}
-	<input type = "submit" value = "Submit" />
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type = "submit" value = "Submit" />
 </form>

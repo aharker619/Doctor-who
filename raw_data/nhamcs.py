@@ -20,8 +20,8 @@ def load_data(filenames, columns, save = False, output_file = None):
     Saves as csv with name output_file if save is True
 
     Inputs:
-    	filenames: list of tuples, year and filename for NHAMCS survey
-    	save: boolean, True if want to write as csv
+        filenames: list of tuples, year and filename for NHAMCS survey
+        save: boolean, True if want to write as csv
         output_file, str, name of file to save data
 
     Output:
