@@ -1,30 +1,5 @@
 '''
-Function Purpose:
-        Given two locations (home_location and away_location), function will 
-            return the latitude, the longitude, the rounded-up distance as a string in km, 
-            the exact distance as an integer in meters, the rounded-up time as 
-            a string in hours and minutes, the exact time as an integer in seconds.
-
-        Input:
-            home_location: a string
-            away_location: a string
-            
-        Return:
-            A list: [text_distance, 
-                    value_distance, text_duration, value_duration]
-
-        Error Conditions:
-            Distance error: 
-                    When unable to drive from home_location to away_location,
-                    returns -1, -1, -1, -1 as the respective values of 
-                    text_distance, value_distance, text_duration, value_duration
-
-            Geocode error:
-                    When unable to locate the home_location and find latitude and longitude,
-                    returns 100, 100 for latitude_home, longitude_home.
-                    returns -1, -1, -1, -1 as the respective values of 
-                    text_distance, value_distance, text_duration, value_duration
-                    
+def get_distance_duration(home_location, away_location):
 
 Test Cases:
 
@@ -33,7 +8,6 @@ Test Cases:
 
             home_location = '1224 E 52nd Street Chicago'
             away_location = 'Harris School of Public Policy'
-
 
         Case 2: 
             Both home_location and away_location are correct, 
@@ -53,7 +27,6 @@ Notes:
         1) Must import googlemaps to use this function:
                 Use command: 'import googlemaps'
               
-                    
         2) APIs used from Google:
             Distance-Matrix:
                 https://developers.google.com/maps/documentation/distance-matrix/
@@ -97,6 +70,32 @@ def calculate_driving(user_address, user_zip, hosp_qs):
     return hosp_qs
 
 def get_distance_duration(home_location, away_location):
+    '''
+    Given two locations (home_location and away_location), function will 
+            return the latitude, the longitude, the rounded-up distance as a string in km, 
+            the exact distance as an integer in meters, the rounded-up time as 
+            a string in hours and minutes, the exact time as an integer in seconds.
+
+        Input:
+            home_location: a string
+            away_location: a string
+            
+        Return:
+            A list: [text_distance, 
+                    value_distance, text_duration, value_duration]
+
+        Error Conditions:
+            Distance error: 
+                    When unable to drive from home_location to away_location,
+                    returns -1, -1, -1, -1 as the respective values of 
+                    text_distance, value_distance, text_duration, value_duration
+
+            Geocode error:
+                    When unable to locate the home_location and find latitude and longitude,
+                    returns 100, 100 for latitude_home, longitude_home.
+                    returns -1, -1, -1, -1 as the respective values of 
+                    text_distance, value_distance, text_duration, value_duration
+    '''
         
     distance_key = 'AIzaSyDyL6HDi1A2BYXGtdwVDZLSgYhkT6nt2cA'
     gmaps_distance = googlemaps.Client(key = distance_key)
