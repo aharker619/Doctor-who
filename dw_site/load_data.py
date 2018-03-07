@@ -3,7 +3,7 @@ import csv
 import os
 
 def load_ed_data():
-    with open('/home/student/Doctor-who/ED.csv') as csvfile:
+    with open('ED.csv') as csvfile:
         reader = csv.reader(csvfile)
         next(reader) 
         for row in reader:
@@ -38,7 +38,7 @@ def load_ed_data():
 
 
 def load_uc_data():
-    with open('/home/student/Doctor-who/urgent_care_data.csv') as csvfile:
+    with open('urgent_care_data.csv') as csvfile:
         reader = csv.reader(csvfile, delimiter= '|')
         next(reader) 
         for row in reader:
@@ -58,7 +58,7 @@ def load_uc_data():
 
 
 def load_zip_data():
-    with open('/home/student/Doctor-who/raw_data/combined_zips.csv') as csvfile:
+    with open('combined_zips.csv') as csvfile:
         reader = csv.reader(csvfile)
         next(reader) 
         for row in reader:
