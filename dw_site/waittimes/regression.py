@@ -62,7 +62,7 @@ def ols_reg(df):
     ols_model = ols.fit(x, y)
     # save the model to disk
     filename = 'finalized_model.sav'
-    pickle.dump(model, open(filename, 'wb'))
+    pickle.dump(ols_model, open(filename, 'wb'))
 
 
 def rf(df):
