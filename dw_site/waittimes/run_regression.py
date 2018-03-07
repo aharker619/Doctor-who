@@ -2,6 +2,7 @@ import waittimes.regression as regression
 import pickle
 
 MEDIAN_AVGWAIT = 42
+ARG = ["very briefly", "briefly", "on average", "beyond average"]
 
 def find_model():
     '''
@@ -34,6 +35,6 @@ def run_regression(user_pain, hosp_qs, model, x):
         x = x.reshape(1, -1)             
     predictions = model.predict(x)
     for i, pred in enumerate(predictions):
-        hosp_qs[i].predicted_wait = pred
+        hosp_qs[i].predicted_wait = ARG[pred-1]
     
     return hosp_qs

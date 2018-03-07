@@ -22,6 +22,9 @@ MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 'SEPT', 'OCT
 WDAY = ['MON', 'TUE', 'WED', 'THUR', 'FRI','SAT', 'SUN']
 indepv = WDAY + MONTHS + VAR
 
+BINS = [0, 11, 24, 53, 1300]
+LABLES = [1,2,3,4]
+
 def clean_data(FILENAME):
     '''
     Input: 
@@ -55,27 +58,19 @@ def clean_data(FILENAME):
     return df
 
 
-def ols_reg(df):
-    y = df["WAITTIME"]
-    x = df[indepv]
-    ols = linear_model.LinearRegression()
-    ols_model = ols.fit(x, y)
-    # save the model to disk
-    filename = 'finalized_model.sav'
-    pickle.dump(ols_model, open(filename, 'wb'))
-
-
 def rf(df):
-    y = df["WAITTIME"]
+    df["BINNED"]=pd.cut(df['WAITTIME'], bins=BINS, labels=LABLES)
+    y = df["BINNED"]
     x = df[indepv]
     rf_model = RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
-            max_depth=5, max_features=5, max_leaf_nodes=None,
             min_impurity_split=1e-07, min_samples_leaf=50,
             min_samples_split=2, min_weight_fraction_leaf=0.0,
-            n_estimators=10, n_jobs=1, oob_score=False,
+            n_estimators=20, n_jobs=1, oob_score=False,
             verbose=0, warm_start=False)
     rf_model.fit(x, y)
-    return rf_model
+    # save the model to disk
+    filename = 'finalized_model.sav'
+    pickle.dump(rf_model, open(filename, 'wb'))
 
 
 def user_time(df):
