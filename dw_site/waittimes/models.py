@@ -77,7 +77,7 @@ class EmergencyDept(models.Model):
     lat = models.FloatField(default = 0)
     msa = models.CharField(max_length = 20, default = '')
     driving_time = models.FloatField(default = 0)
-    predicted_wait = models.FloatField(default = 0) 
+    predicted_wait = models.CharField(max_length = 20, default = '') 
 
     objects = LocationQuerySet().as_manager()
 

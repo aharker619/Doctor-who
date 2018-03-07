@@ -23,7 +23,7 @@
                     <h3>{{ hosp.name }}</h3>
                     <p>Total time: {{ total_time|floatformat }} minutes<p>
                     <p>Driving time: {{ hosp.driving_time|floatformat }} minutes</p>
-                    <p>Predicted wait time: {{ hosp.predicted_wait|floatformat }} minutes</p>
+                    <p>Predicted to wait {{ hosp.predicted_wait }}</p>
                     {% if hosp.score != -1 %}
                         <p>Average wait time: {{ hosp.score }} minutes<p>
                     {% else %}
