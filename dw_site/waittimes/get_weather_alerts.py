@@ -1,4 +1,4 @@
-simport requests
+import requests
 from math import sqrt, pow
 
 def temp_description(zip_code):
