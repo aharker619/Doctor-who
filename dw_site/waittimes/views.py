@@ -2,14 +2,12 @@
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime
 from waittimes.closest_hosp import find_closest, sort_hospitals
 from waittimes.get_distance_duration import calculate_driving
 from waittimes.get_weather_alerts import check_weather
 import waittimes.regression as regression
 import waittimes.run_regression as run_regression
-
 
 from .forms import UserForm
 
@@ -25,14 +23,7 @@ def user_info(request):
             address = form.cleaned_data['address']
             user_pain = form.cleaned_data['user_pain']
             # find closest hospitals, calculate driving time, predict waittime
-            try:
-                hosp_qs, uc_qs = find_closest(zipcode)
-            except ObjectDoesNotExist:
-                # https://docs.djangoproject.com/en/2.0/ref/forms/validation/#raising-validation-error
-                raise ValidationError(
-                    _('Invalid zipcode: %(zipcode)s'),
-                    code = 'invalid',
-                    params = {'zipcode': zipcode})
+            hosp_qs, uc_qs = find_closest(zipcode)
             hosp_qs = calculate_driving(address, zipcode, hosp_qs)
             hosp_qs = run_regression.run_regression(user_pain, hosp_qs, model, df)
             sort_hosp = sort_hospitals(hosp_qs)
