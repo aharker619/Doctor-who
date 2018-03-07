@@ -112,9 +112,11 @@ def alerts(zip_code):
     
     alerts = []
 
-    for row in json_data['alerts']:
-        alert = row['message']
-        alerts.append(alert)
+    error_check = 1
+    
+    if len(json_data) > error_check:
+        for row in json_data['alerts']:
+            alerts.append(row['message'])
         
     return alerts
 
