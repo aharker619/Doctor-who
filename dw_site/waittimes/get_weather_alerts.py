@@ -3,17 +3,19 @@ from math import sqrt, pow
 
 def temp_description(zip_code):
     '''
-    Given a zip code, returns the current temperature in celcius,
-        and a description of the weather outside
+    Given a zip code, returns the current weather descriptions, wind chill, 
+    and/or head_index if they are considered severe or extreme.
         
     Input: zip_code (integer, or string)
     
-    Return: (description, temp_celcius)
+    Return: list of descriptions that can include
         description: description of weather (string)
-        temp_celsius: temperature in celcius (string)
+        wind_chill: warning including calculated wind chill
+        heat_warning: warning including calculated heat index
         
     Exception:
-        if zip_code not in USA, then returns (-1, -1)
+        if zip_code not valid or no extreme descriptions then returns 
+        empty list
     '''
     zip_code = str(zip_code)
     api_key = '3f180d31de6b4b363583654168714937'
@@ -50,6 +52,12 @@ def calc_heat_index(temp_f, humidity):
     '''
     Calculate the heat index using the Rothfusz regression equation
     www.wpc.ncep.noaa.gov/html/heatindex_equation.shtml
+
+    Inputs: 
+        temp_f: temperature in fahrenheit
+        humidity: relative humidity as percent
+    Returns:
+        heat_index
     '''
     adj = 0
     heat_index = (-42.379 + 2.04901523 * temp_f + 10.14333127 * humidity - 
@@ -70,6 +78,12 @@ def calc_wind_chill(temp_f, wind_mph):
     '''
     Calculate the wind chill
     www.weather.gov/media/epz/wxcalc/windChill.pdf
+    
+    Inputs: 
+        temp_f: temperature in fahrenheit
+        wind_mph: windspeed in miles per hour
+    Returns:
+        wind_chill
     '''
     wind_chill = 35.74 + (0.6215 * temp_f) - (35.75 * pow(wind_mph, 0.16)) + (
                  0.4275 * temp_f * pow(wind_mph, 0.16))
@@ -79,13 +93,13 @@ def calc_wind_chill(temp_f, wind_mph):
 
 def alerts(zip_code):
     '''
-    Given a zip_code, returns the number of alerts issued for that particular zip_code at the time,
-        along with the alerts as a list.
+    Given a zip_code, returns the alerts issued for that particular zip_code
+    at the time as a list.
         
     Input: zip_code (as integer or string)
     
-    Result: returns a tuple of (the number of alerts, list of alerts (if any))
-            If no alerts, returns (0, [])
+    Result: returns list of alerts (if any))
+            If no alerts, returns []
             
     Total number of calls allowed per day through wunderground alerts api: 500
     '''
@@ -98,7 +112,7 @@ def alerts(zip_code):
         
     alerts = []
     for row in json_data['alerts']:
-        alert = row['message'].replace('\n', ' ')
+        alert = row['message']
         alerts.append(alert)
         
     return alerts

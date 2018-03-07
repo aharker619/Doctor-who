@@ -1,6 +1,8 @@
 from waittimes.models import EmergencyDept, UrgentCare, ZipLocation
 from django.shortcuts import get_object_or_404
 
+MEDIAN_AVGWAIT = 42
+
 def find_closest(zipcode):
     '''
     Given a zipcode from ui, return the 5 closest hospitals and closest urgent care
@@ -47,7 +49,10 @@ def sort_hospitals(hosp_qs):
     # store total time as tuple
     for hosp in hosp_qs:
         if hosp.driving_time != -1 / 60:
-            time = hosp.driving_time + hosp.predicted_wait
+            if hosp.score != -1:
+                time = hosp.driving_time + hosp.score
+            else:
+                time = hosp.driving_time + MEDIAN_AVGWAIT
         else:
             time = 9999
         sort_hosp.append((time, hosp))

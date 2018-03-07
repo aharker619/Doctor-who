@@ -13,9 +13,10 @@
             Your area is experiencing weather conditions that could affect your wait time.
             <a href="{% url 'waittimes:weather_alert' zipcode=zipcode weather=weather %}" style="color:yellow">Click here for weather alert details.</a>
             </div>
-        <div>
-            <p> The following are the five closest hospitals within 800 km. We have sorted them based on total time which includes driving time and predicted wait time.</p>
         {% endif %}
+        <div>
+            <p> The following are the five closest Emergency Departments within 800 km. The Emergency Departments are sorted based on total time which is the sum of driving time and average wait time. The predicted wait time is based on the current time and date, indicated pain scale, and the hospital location and average wait time.</p>
+        </div>
         {% for total_time, hosp in sort_hosp %}
             <div>
                 {% if total_time != 9999 %}
