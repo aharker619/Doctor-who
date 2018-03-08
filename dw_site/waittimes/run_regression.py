@@ -35,6 +35,6 @@ def run_regression(user_pain, hosp_qs, model, x):
         x = x.reshape(1, -1)             
     predictions = model.predict(x)
     for i, pred in enumerate(predictions):
-        hosp_qs[i].predicted_wait = ARG[pred-1]
+        hosp_qs[i].predicted_wait = ARG[pred]
     
     return hosp_qs
