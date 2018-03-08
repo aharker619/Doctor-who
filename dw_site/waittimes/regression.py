@@ -22,7 +22,7 @@ MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 'SEPT', 'OCT
 WDAY = ['MON', 'TUE', 'WED', 'THUR', 'FRI','SAT', 'SUN']
 indepv = WDAY + MONTHS + VAR
 
-#bins the waittime by four quarter of the data
+#bins the waittime by 25% of the data
 BINS = [0, 11, 24, 53, 1300]
 LABLES = [1,2,3,4]
 
@@ -31,7 +31,7 @@ def clean_data(FILENAME):
     Input: 
          a string of the csvfile name
     Output:
-         a clean panda dataframe
+         a clean pandas dataframe
     '''
     df = pd.read_csv(FILENAME, index_col=0)
     #drop all the negatvie value
@@ -57,12 +57,19 @@ def clean_data(FILENAME):
     df.drop(['HOSPCODE'], inplace=True, axis=1)
     df.drop(['YEAR'], inplace=True, axis=1)
 
-    #bin the waittime by four quarter of the data 
+    #bin the waittime by 4 
     df["BINNED"]=pd.cut(df['WAITTIME'], bins=BINS, labels=LABLES)
     return df
 
 
 def rf(df):
+    '''
+    Generate the random forest model using existing dataset
+
+    Returns: (None)
+       Save the random forest model using pickle
+    
+    '''
     y = df["BINNED"]
     x = df[indepv]
     rf_model = RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
@@ -74,7 +81,6 @@ def rf(df):
     # save the model to disk
     filename = 'finalized_model.sav'
     pickle.dump(rf_model, open(filename, 'wb'))
-
 
 
 def user_time(df):
@@ -102,7 +108,7 @@ def user_time(df):
 def randomforest(df):
     y = df["BINNED"]
     x = df[indepv]
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3, random_state=42)
     
     #create and train the random forest
     rf = RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
@@ -122,15 +128,15 @@ def randomforest(df):
     print('RandomForest Score:', rf.score(x_test, y_test), rf.score(x_train, y_train))
 
 
-def ols(dataset):
+def ols(df):
     '''
-    dataset: data frame of nhamcs data, cleaned
+    Run ols regression and print out the scores for comparison
     '''
-    y = dataset["WAITTIME"]
-    x = dataset[indepv]
+    y = df["WAITTIME"]
+    x = df[indepv]
 
     # get train/test data
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3, random_state=42)
 
     # fit a OLS model
     ols = linear_model.LinearRegression()
@@ -148,15 +154,15 @@ def ols(dataset):
     #return predictions, x_test, y_test
 
 
-def logit(dataset, indepv):
+def logit(df):
     '''
-    dataset: data frame of nhamcs data, cleaned
+    Run logit regression and print out the scores for comparison
     '''
-    y = dataset["WAITTIME"]
-    x = dataset[indepv]
+    y = df["WAITTIME"]
+    x = df[indepv]
 
     # get train/test data
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3, random_state=42)
     log = linear_model.LogisticRegression()
     log_model = log.fit(x_train, y_train)
     predictions = log_model.predict(x_test)
@@ -180,11 +186,11 @@ def kernel_reg(df, bw=30, indepv="ARRTIME", kernel='gaussian'):
         indepv: (a list) of strings of the indepedent variable names
         bw: (float) bandwidth
         
-    Returns: the plot graph
+    Run kernel regression and print out the scores for comparison
     '''
     y = df["WAITTIME"]
     x = df[indepv]
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3, random_state=42)
 
     train = pd.concat([x_train, y_train], axis=1)
     test = pd.concat([x_test, y_test], axis=1)
