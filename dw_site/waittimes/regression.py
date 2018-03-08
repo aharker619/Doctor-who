@@ -22,6 +22,7 @@ MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 'SEPT', 'OCT
 WDAY = ['MON', 'TUE', 'WED', 'THUR', 'FRI','SAT', 'SUN']
 indepv = WDAY + MONTHS + VAR
 
+#bins the waittime by four quarter of the data
 BINS = [0, 11, 24, 53, 1300]
 LABLES = [1,2,3,4]
 
@@ -55,11 +56,13 @@ def clean_data(FILENAME):
     df.drop(['VDAYR'], inplace=True, axis=1)
     df.drop(['HOSPCODE'], inplace=True, axis=1)
     df.drop(['YEAR'], inplace=True, axis=1)
+
+    #bin the waittime by four quarter of the data 
+    df["BINNED"]=pd.cut(df['WAITTIME'], bins=BINS, labels=LABLES)
     return df
 
 
 def rf(df):
-    df["BINNED"]=pd.cut(df['WAITTIME'], bins=BINS, labels=LABLES)
     y = df["BINNED"]
     x = df[indepv]
     rf_model = RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
@@ -71,6 +74,7 @@ def rf(df):
     # save the model to disk
     filename = 'finalized_model.sav'
     pickle.dump(rf_model, open(filename, 'wb'))
+
 
 
 def user_time(df):
@@ -96,12 +100,16 @@ def user_time(df):
 #########################The regressions we have tried...######################
 
 def randomforest(df):
-    y = df["WAITTIME"]
+    y = df["BINNED"]
     x = df[indepv]
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3)
     
     #create and train the random forest
-    rf = RandomForestClassifier(n_estimators=10)
+    rf = RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            min_impurity_split=1e-07, min_samples_leaf=50,
+            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            n_estimators=20, n_jobs=1, oob_score=False,
+            verbose=0, warm_start=False)
     rf.fit(x_train, y_train)
     predictions = rf.predict(x_test)
     # plot
@@ -114,7 +122,7 @@ def randomforest(df):
     print('RandomForest Score:', rf.score(x_test, y_test), rf.score(x_train, y_train))
 
 
-def ols(dataset, indepv):
+def ols(dataset):
     '''
     dataset: data frame of nhamcs data, cleaned
     '''
