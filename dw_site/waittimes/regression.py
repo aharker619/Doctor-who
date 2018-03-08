@@ -24,7 +24,7 @@ indepv = WDAY + MONTHS + VAR
 
 #bins the waittime by 25% of the data
 BINS = [0, 11, 24, 53, 1300]
-LABLES = [1,2,3,4]
+LABLES = [0,1,2,3]
 
 def clean_data(FILENAME):
     '''
