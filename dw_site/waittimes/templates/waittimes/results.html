@@ -5,7 +5,7 @@
     </head>
     <body>
         <div>
-            <h2 style="color:#800000">Emergency Department Results for {{ zipcode }}</h2>
+            <h2 style="color:#800000" align="center">Emergency Department Results for {{ zipcode }}</h2>
         </div>
         {% if weather %}
             <div style="color: #FFFFFF; background-color: #800000; padding-bottom:8px; padding-left:8px; padding-right:8px; padding-top:8px;">
@@ -15,7 +15,7 @@
             </div>
         {% endif %}
         <div>
-            <p> The following are the five closest Emergency Departments within 800 km. The Emergency Departments are sorted based on total time which is the sum of driving time and average wait time. The predicted wait time is based on the current time and date, indicated pain scale, hospital location, and average wait time.</p>
+            <p>The following are the five closest Emergency Departments within 800 km. The Emergency Departments are sorted based on total time which is the sum of driving time and average wait time. The predicted wait time is based on the current time and date, indicated pain scale, hospital location, and average wait time.</p>
         </div>
         {% for total_time, hosp in sort_hosp %}
             <div>
@@ -43,7 +43,7 @@
         </div>
         {% if uc_qs %}
         <div>
-            <h2 style="color:#800000">Urgent Care Results for {{ zipcode }}</h2>
+            <h2 style="color:#800000" align="center">Urgent Care Results for {{ zipcode }}</h2>
             <p>This is the closest Urgent Care center within 1000 km. <a href="/waittimes/uc_fyi.html">Click here for more information on Urgent Care centers.</a></p>
 
         </div>

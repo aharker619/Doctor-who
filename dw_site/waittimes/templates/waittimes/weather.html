@@ -4,7 +4,7 @@
 	</head>
 	<body>
 		<div>
-			<h2>Weather Alerts for {{zipcode}}</h2>
+			<h2 align="center">Weather Alerts for {{zipcode}}</h2>
 		</div>
 		{% for alert in weather %}
 			<div>
@@ -16,3 +16,4 @@
             <p style="font-size:12px">The weather alerts are gathered from WeatherUnderground API. If there are no alerts for your zipcode we checked for extreme weather including heat index and wind chill using OpenWeatherMap API.</p>
         </div>
     </body>
+</html>
