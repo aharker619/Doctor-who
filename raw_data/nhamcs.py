@@ -1,7 +1,7 @@
 # Alyssa Harker
 # 1/29/18
 # update 2/13/18
-# own code
+# Original Code
 
 import pandas as pd
 import numpy as np
@@ -14,13 +14,14 @@ MSA_FILES = ['nhamcsed2015.csv', 'nhamcsed2014.csv', 'nhamcsed2013.csv']
 MSA_COL = ['VMONTH', 'VDAYR', 'ARRTIME', 'WAITTIME', 'IMMEDR', 'PAINSCALE',
                'HOSPCODE', 'MSA', 'YEAR']
 
-def load_data(filenames, columns, save = False, output_file = None):
+def load_data(filenames, columns = MSA_COL, save = False, output_file = None):
     '''
     Loads data from filename and selects useful columns from NHAMCS survey
     Saves as csv with name output_file if save is True
 
     Inputs:
-        filenames: list of tuples, year and filename for NHAMCS survey
+        filenames: list of filenames for NHAMCS survey
+        columns: list of columns to save from original file
         save: boolean, True if want to write as csv
         output_file, str, name of file to save data
 
@@ -35,6 +36,9 @@ def load_data(filenames, columns, save = False, output_file = None):
         if filename == 'nhamcsed2013.csv':
             data = pd.read_csv(filename, usecols = lower_cols)
             data.columns = columns
+        elif filename == 'nhamcsed2012.csv':
+            data = pd.read_csv(filename, usecols = COLUMNS)
+            data['MSA'] = 0
         else:
             data = pd.read_csv(filename, usecols = columns)
 
