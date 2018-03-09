@@ -7,7 +7,7 @@ from waittimes.closest_hosp import find_closest, sort_hospitals
 from waittimes.get_distance_duration import calculate_driving
 from waittimes.get_weather_alerts import check_weather
 import waittimes.regression as regression
-import waittimes.run_regression as prediction
+import waittimes.prediction as run_regression
 
 from .forms import UserForm
 
