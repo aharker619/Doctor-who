@@ -81,7 +81,7 @@ Code Structure:
             - used to get weather alerts from WeatherUnderground and/or OpenWeatherMaps API
         - regression.py: Tianchu
             - python functions for running regression
-        - run_regression.py: Tianchu
+        - prediction.py: Tianchu
             - python functions for interfacing user input data with regression models and formatting results
         - finalized_model.sav: file for saving model for pickle
         - nhamcs_all_data.csv: for regression.py
