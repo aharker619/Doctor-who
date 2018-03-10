@@ -1,10 +1,17 @@
+# Alyssa Harker
+# Modified Code: http://abhishekchhibber.com/django-importing-a-csv-file-to-database-models/
+
 from waittimes.models import UrgentCare, EmergencyDept, PatientWaittime, ZipLocation
 import csv
-import os
+
 
 def load_ed_data():
+    '''
+    Opens ED.csv to load data into EmergencyDept model in django shell.
+    '''
     with open('ED.csv') as csvfile:
         reader = csv.reader(csvfile)
+        # skip header
         next(reader) 
         for row in reader:
             unit = EmergencyDept()
@@ -38,8 +45,13 @@ def load_ed_data():
 
 
 def load_uc_data():
+    '''
+    Opens urgent_care_data.csv to load data into UrgentCare model in django 
+    shell.
+    '''
     with open('urgent_care_data.csv') as csvfile:
         reader = csv.reader(csvfile, delimiter= '|')
+        # skip header
         next(reader) 
         for row in reader:
             unit = UrgentCare()
@@ -58,8 +70,13 @@ def load_uc_data():
 
 
 def load_zip_data():
+    '''
+    Opens combined_zips.csv to load data into ZipLocation model in django 
+    shell.
+    '''
     with open('combined_zips.csv') as csvfile:
         reader = csv.reader(csvfile)
+        # skip header
         next(reader) 
         for row in reader:
             unit = ZipLocation()

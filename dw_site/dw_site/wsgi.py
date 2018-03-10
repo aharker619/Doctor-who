@@ -1,3 +1,4 @@
+# Direct Copy: Django generated
 """
 WSGI config for dw_site project.
 

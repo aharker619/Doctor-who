@@ -3,7 +3,8 @@
 /* hgi.csv from Hospital General Information from Medicare Hospital Compare */
 /* msa.csv from https://www.census.gov/geographies/reference-files/time-series/demo/metro-micro/delineation-files.html*/
 /* states.csv from https://github.com/jasonong/List-of-US-States/blob/master/states.csv */
-/* zip_table data from https://gist.github.com/erichurst/7882666 which uses Census ZCTAs from 2015 to match hospitals */
+/* combined_zips.csv from https://boutell.com/zipcodes/ and 2015_Gaz_zcta_national.txt */
+
 
 CREATE TABLE time
   (provider_id varchar(10),

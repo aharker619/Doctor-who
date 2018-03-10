@@ -1,7 +1,11 @@
+/* Alyssa Harker */
+
+/* Direct Copy: http://www.sqlitetutorial.net/sqlite-export-csv/ */
 .mode csv
 .headers on
 .output ED.csv
 
+/* Original Code */
 SELECT time.provider_id, time.hospital_name, time.address, time.city, time.state,
 time.zip_code, time.phone_number, time.score, time.sample, hgi.hospital_overall_rating,
 zip_table.lng, zip_table.lat, counties.msa

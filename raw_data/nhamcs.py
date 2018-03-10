@@ -1,7 +1,5 @@
 # Alyssa Harker
-# 1/29/18
-# update 2/13/18
-# Original Code
+# Code Ownership: Original Code
 
 import pandas as pd
 import numpy as np
@@ -13,6 +11,7 @@ COLUMNS = ['VMONTH', 'VDAYR', 'ARRTIME', 'WAITTIME', 'IMMEDR', 'PAINSCALE',
 MSA_FILES = ['nhamcsed2015.csv', 'nhamcsed2014.csv', 'nhamcsed2013.csv']
 MSA_COL = ['VMONTH', 'VDAYR', 'ARRTIME', 'WAITTIME', 'IMMEDR', 'PAINSCALE',
                'HOSPCODE', 'MSA', 'YEAR']
+
 
 def load_data(filenames, columns = MSA_COL, save = False, output_file = None):
     '''
@@ -32,16 +31,17 @@ def load_data(filenames, columns = MSA_COL, save = False, output_file = None):
     lower_cols = [x.lower() for x in columns]
     all_years = []
     for filename in filenames:
-
+        # filenames for 2013 are lowercase
         if filename == 'nhamcsed2013.csv':
             data = pd.read_csv(filename, usecols = lower_cols)
             data.columns = columns
+        # make MSA column all 0 for 2012 since it is not reported
         elif filename == 'nhamcsed2012.csv':
             data = pd.read_csv(filename, usecols = COLUMNS)
             data['MSA'] = 0
         else:
             data = pd.read_csv(filename, usecols = columns)
-
+        # only select data with published wait times
         wait_data = data[data.WAITTIME >= 0].copy()
         all_years.append(wait_data)
     all_years_df = pd.concat(all_years)
