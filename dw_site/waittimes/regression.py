@@ -101,6 +101,9 @@ def user_time(df):
 #########################The regressions we have tried...######################
 
 def randomforest(df):
+    '''
+    Run RandomForestClassify and print out the scores for comparison
+    '''
     y = df["BINNED"]
     x = df[indepv]
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3, random_state=42)
