@@ -59,13 +59,14 @@ def calculate_driving(user_address, user_zip, hosp_qs):
     Returns:
         hosp_qs: updated list with driving time in minutes
     '''
+    user_address = ' '.join([user_address, user_zip])
     for hosp in hosp_qs:
         hosp_address = ' '.join([hosp.address, hosp.city, hosp.state, hosp.zipcode])
-        user_address = ' '.join([user_address, user_zip])
         driving_sec = get_distance_duration(user_address, hosp_address)
         # if the address is incorrect, recalculate with zipcode only
         if driving_sec is None:
-            driving_sec = get_distance_duration(user_zip, hosp_address)
+            user_address = user_zip
+            driving_sec = get_distance_duration(user_address, hosp_address)
         hosp.driving_time = driving_sec / 60
     return hosp_qs
 
@@ -104,9 +105,7 @@ def get_distance_duration(home_location, away_location):
     gmaps_geocode = googlemaps.Client(key = geocode_key)
     
     geocode = gmaps_geocode.geocode(home_location)
-    if geocode:
-        latitude_home, longitude_home = geocode[0]['geometry']['location'].values()
-    else:
+    if not geocode:
         return None
     
     distance = gmaps_distance.distance_matrix(home_location, away_location)

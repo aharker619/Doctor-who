@@ -1,15 +1,20 @@
+# Alyssa Harker
+# Original Code using Django documentation for queries
+# https://docs.djangoproject.com/en/2.0/ref/models/querysets/
+
 from waittimes.models import EmergencyDept, UrgentCare, ZipLocation
-from django.shortcuts import get_object_or_404
 
 MEDIAN_AVGWAIT = 42
 
+
 def find_closest(zipcode):
     '''
-    Given a zipcode from ui, return the 5 closest hospitals and closest urgent care
+    Given a zipcode from ui, return the 5 closest hospitals and closest urgent
+    care center
     Input:
         zipcode: str
     Output:
-        tuple: (query for hospitals, query for urgent care)
+        tuple: (query list for hospitals, query list for urgent care)
     '''
     if not zipcode:
         return ([], [])
@@ -35,8 +40,7 @@ def find_closest(zipcode):
 
     return (hosp_qs, uc_qs)
 
-# https://stackoverflow.com/questions/15214992/it-is-necessary-to-use-geodjango-to-query-distances-in-django
-# https://stackoverflow.com/questions/19703975/django-sort-by-distance/26219292#26219292
+
 def sort_hospitals(hosp_qs):
     '''
     Given list of hospitals sort by total predicted time and driving time
@@ -53,6 +57,7 @@ def sort_hospitals(hosp_qs):
                 time = hosp.driving_time + hosp.score
             else:
                 time = hosp.driving_time + MEDIAN_AVGWAIT
+        # set value to skip in displaying results
         else:
             time = 9999
         sort_hosp.append((time, hosp))
