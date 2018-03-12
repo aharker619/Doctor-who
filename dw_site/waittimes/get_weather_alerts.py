@@ -125,6 +125,11 @@ def check_weather(zip_code):
     '''
     Check for extreme weather, high heat index, low wind chill, 
     and weather alerts for a given zipcode
+
+    Input:
+        zip_code: string
+    Returns:
+        alert: list of alert strings
     '''
     alert = alerts(zip_code)
     if not alert:
