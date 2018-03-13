@@ -18,12 +18,15 @@ def temp_description(zip_code):
         empty list
     '''
     zip_code = str(zip_code)
+    
+    # Reference: https://openweathermap.org/api
     api_key = '3f180d31de6b4b363583654168714937'
     link = ('http://api.openweathermap.org/data/2.5/weather?appid=' + api_key +
             '&zip=' + zip_code)
     json_data = requests.get(link).json()
     description = []
     
+    # ERROR_CHECK found through trial and error
     ERROR_CHECK = 2
     if len(json_data) > ERROR_CHECK:
         desc_code = json_data['weather'][0]['id']
@@ -107,13 +110,16 @@ def alerts(zip_code):
     '''
     
     zip_code = str(zip_code)
+    
+    # Reference: https://www.wunderground.com/weather/api/d/docs
     api_key = 'd334c0dee519eb72'
     link = 'http://api.wunderground.com/api/' + api_key + '/alerts/q/' + zip_code + '.json'
     
     json_data = requests.get(link).json()
     
     alerts = []
-
+   
+    #ERROR_CHECK found through trial and error
     ERROR_CHECK = 1
     
     if len(json_data) > ERROR_CHECK:
