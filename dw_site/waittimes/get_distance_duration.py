@@ -97,10 +97,12 @@ def get_distance_duration(home_location, away_location):
                     returns -1, -1, -1, -1 as the respective values of 
                     text_distance, value_distance, text_duration, value_duration
     '''
-        
+    
+    # Used from: https://developers.google.com/maps/documentation/distance-matrix/
     distance_key = 'AIzaSyDyL6HDi1A2BYXGtdwVDZLSgYhkT6nt2cA'
     gmaps_distance = googlemaps.Client(key = distance_key)
     
+    # Used from: https://developers.google.com/maps/documentation/geocoding/intro
     geocode_key = 'AIzaSyCnnrmNeGlB8Y7PLY7owGmewxpHH3_kDBU'
     gmaps_geocode = googlemaps.Client(key = geocode_key)
     
