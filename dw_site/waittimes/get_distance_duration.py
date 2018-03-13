@@ -111,11 +111,8 @@ def get_distance_duration(home_location, away_location):
     distance = gmaps_distance.distance_matrix(home_location, away_location)
     if distance['rows'][0]['elements'][0]['status'] == 'ZERO_RESULTS' or \
         distance['rows'][0]['elements'][0]['status'] == 'NOT_FOUND':
-            text_distance, value_distance, text_duration, value_duration = -1, -1, -1, -1
+            value_duration = -1
     else:
-        text_distance = distance['rows'][0]['elements'][0]['distance']['text']
-        value_distance = distance['rows'][0]['elements'][0]['distance']['value']
-        text_duration = distance['rows'][0]['elements'][0]['duration']['text']
         value_duration = distance['rows'][0]['elements'][0]['duration']['value']
 
     return value_duration
