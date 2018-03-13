@@ -108,7 +108,8 @@ def alerts(zip_code):
             
     Total number of calls allowed per day through wunderground alerts api: 500
     '''
-    
+    # original code
+    # Inspired from general request module usages
     zip_code = str(zip_code)
     
     # Reference: https://www.wunderground.com/weather/api/d/docs
@@ -116,9 +117,7 @@ def alerts(zip_code):
     link = 'http://api.wunderground.com/api/' + api_key + '/alerts/q/' + zip_code + '.json'
     
     json_data = requests.get(link).json()
-    
     alerts = []
-   
     #ERROR_CHECK found through trial and error
     ERROR_CHECK = 1
     
