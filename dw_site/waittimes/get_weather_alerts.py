@@ -23,7 +23,9 @@ def temp_description(zip_code):
             '&zip=' + zip_code)
     json_data = requests.get(link).json()
     description = []
-    if len(json_data) > 2:
+    
+    ERROR_CHECK = 2
+    if len(json_data) > ERROR_CHECK:
         desc_code = json_data['weather'][0]['id']
         extreme_codes = [202, 212, 221, 504, 511, 522, 602, 611, 900, 901, 
                          902, 903, 904, 905, 906, 959, 960, 961, 962]
@@ -112,9 +114,9 @@ def alerts(zip_code):
     
     alerts = []
 
-    error_check = 1
+    ERROR_CHECK = 1
     
-    if len(json_data) > error_check:
+    if len(json_data) > ERROR_CHECK:
         for row in json_data['alerts']:
             alerts.append(row['message'])
         
